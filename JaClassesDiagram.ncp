@@ -1,0 +1,126 @@
+<Project>
+  <Name>JaDict</Name>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
+    <Name>JaDict</Name>
+    <Language>Java</Language>
+    <Entities>
+      <Entity type="Class">
+        <Name>Dictonary</Name>
+        <Access>Default</Access>
+        <Location left="99" top="300" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private TreeMap&lt;String&gt; dictMap</Member>
+        <Member type="Field">private Set dictSet</Member>
+        <Member type="Method">private void load()</Member>
+        <Member type="Method">public String getChapter(String key)</Member>
+        <Member type="Method">public String[] makePromptList()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>UI</Name>
+        <Access>Public</Access>
+        <Location left="473" top="61" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private Label nameUsedDict</Member>
+        <Member type="Field">private PromptList promptList</Member>
+        <Member type="Field">private TextField searchTextField</Member>
+        <Member type="Field">private Button searshButton</Member>
+        <Member type="Field">private TextArea chapterArea</Member>
+        <Member type="Field">private Menu menu</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Settings</Name>
+        <Access>Public</Access>
+        <Location left="295" top="300" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private String currentDictPath</Member>
+        <Member type="Method">public void loadSettings()</Member>
+        <Member type="Method">public void changeSettings()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Menu</Name>
+        <Access>Public</Access>
+        <Location left="711" top="300" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private Item open</Member>
+        <Member type="Field">private Item settings</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Application</Name>
+        <Access>Public</Access>
+        <Location left="91" top="7" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private int dictonary</Member>
+        <Member type="Field">private UI ui</Member>
+        <Member type="Field">private Settings setings</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+    </Entities>
+    <Relationships>
+      <Relationship type="Association" first="3" second="1">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>708</X>
+          <Y>275</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>660</X>
+          <Y>210</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="0" second="4">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>46</X>
+          <Y>66</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="1" second="4">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>448</X>
+          <Y>83</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>278</X>
+          <Y>83</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="2" second="4">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>278</X>
+          <Y>109</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+      </Relationship>
+    </Relationships>
+  </ProjectItem>
+</Project>
