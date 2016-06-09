@@ -8,35 +8,19 @@ package jadict;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.logging.Level;
 
 /**
  *
  * @author Сергей
  */
 public class Logger {
-
+   
     File file;
     FileWriter fw;
     static final int MAX = 10;
     int ctr = 0;
-    Calendar cld;
-    String filePath;
-public static Logger getInstance (String filePath){
-    return new Logger(filePath);
-}
-    private Logger(String filePath)  {
-        this.filePath = filePath;
-        file = new File(filePath);
-        try {
-            fw = new FileWriter(file);
-        } catch (IOException ex) {
-            System.out.println("Ошибка ввода - вывода в логере");
-        }
-        cld = new GregorianCalendar();
-    }
+   
 
     String curTime() {
          return GregorianCalendar.getInstance().getTime().toString();
@@ -53,15 +37,34 @@ public static Logger getInstance (String filePath){
         try {
             fw.write(sb.toString());
             ctr++;
+            fw.close();
             if (ctr>=MAX){
              file.delete();
-             file = new File(filePath);
+             file = new File(Settings.getInstance().dictLoggPath);
             }
         } catch (IOException ex) {
             System.out.println(curTime()+" ошибка записи файла");
         }
         
         
+    }
+
+ //   here singleton mechanism  
+private static Logger unicInstance;    
+public static Logger getInstance (){
+    if (unicInstance==null){
+            unicInstance = new Logger();
+        }
+        return unicInstance;
+}
+private Logger()  {
+        file = new File(Settings.getInstance().dictLoggPath);
+        try {
+            fw = new FileWriter(file);
+        } catch (IOException ex) {
+            System.out.println("Ошибка ввода - вывода в логере");
+        }
+     
     }
 
 }

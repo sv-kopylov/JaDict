@@ -11,6 +11,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,7 +21,7 @@ import java.util.TreeSet;
 public class Dictonary implements Serializable {
 
   
-
+    public final String dictName=null;
     private TreeMap<String, String> dictMap = null;
     private TreeSet<String> dictSet = null;
     Settings settings = Settings.getInstance();
@@ -87,7 +89,7 @@ ch = (char) nextCh;
     public String getArticle(String key) {
         String article = null;
         if (key != null) {
-            article = dictMap.get(key);
+            article = key+"  "+dictMap.get(key);
         }
         return article;
     }
@@ -100,17 +102,28 @@ ch = (char) nextCh;
     }
 
     void saveDic() throws IOException {
-        File file = new File("C:\\Projects\\JaDict\\dict.bin");
+        File file = new File("C:\\Projects\\JaDict\\dict.dict");
         ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(file));
         oo.writeObject(this);
+//-d
+        System.out.println("saved");
 
     }
 
-    static Dictonary loadDic() throws IOException, ClassNotFoundException {
-        File file = new File("C:\\Projects\\JaDict\\dict.bin");
-        ObjectInputStream oi = new ObjectInputStream(new FileInputStream(file));
-        Dictonary dic;// = new Dictonary();
-        dic = (Dictonary) oi.readObject();
+    static Dictonary loadDic()  {
+        Dictonary dic = null;// = new Dictonary();
+        File file = new File("C:\\Projects\\JaDict\\dict.dict");
+       
+        try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream(file));){
+            dic = (Dictonary) oi.readObject();
+        } catch (IOException ex) {
+            System.out.println("не могу найти файл");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("проблемы с поиском класса");
+        }
+       //-d
+        System.out.println("loaded");
+        
         return dic;
 
     }

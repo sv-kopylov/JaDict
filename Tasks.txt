@@ -1,0 +1,13 @@
+Tasks
+08.06.16
+01 - make fomatter
+02 - loader algorothm revision
+02 - separate loader class -
+04 - debugging saveBin and loadBin ++
+05 - makezd start from app
+06 - makezd sourcess and licenses search
+07 - edit readme - not zdb but zd format
+08 - setngs: save dict name after parsing (loading  from txt), every load - scan isExist saved dics
+09 - make Logger singleton, add conditional logging
+10 - think about relative paths ++
+

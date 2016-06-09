@@ -7,23 +7,24 @@
       <Entity type="Class">
         <Name>Dictonary</Name>
         <Access>Default</Access>
-        <Location left="99" top="300" />
+        <Location left="35" top="277" />
         <Size width="162" height="216" />
         <Collapsed>False</Collapsed>
         <Member type="Field">private TreeMap&lt;String&gt; dictMap</Member>
         <Member type="Field">private Set dictSet</Member>
-        <Member type="Method">private void load()</Member>
-        <Member type="Method">public String getChapter(String key)</Member>
+        <Member type="Field">private final String dicName</Member>
+        <Member type="Method">String load(String filePath)</Member>
+        <Member type="Method">public String getArticle(String key)</Member>
         <Member type="Method">public String[] makePromptList()</Member>
         <Modifier>None</Modifier>
       </Entity>
       <Entity type="Class">
         <Name>UI</Name>
         <Access>Public</Access>
-        <Location left="473" top="61" />
+        <Location left="659" top="10" />
         <Size width="162" height="216" />
         <Collapsed>False</Collapsed>
-        <Member type="Field">private Label nameUsedDict</Member>
+        <Member type="Field">private Label dictName</Member>
         <Member type="Field">private PromptList promptList</Member>
         <Member type="Field">private TextField searchTextField</Member>
         <Member type="Field">private Button searshButton</Member>
@@ -34,18 +35,20 @@
       <Entity type="Class">
         <Name>Settings</Name>
         <Access>Public</Access>
-        <Location left="295" top="300" />
+        <Location left="268" top="197" />
         <Size width="162" height="216" />
         <Collapsed>False</Collapsed>
         <Member type="Field">private String currentDictPath</Member>
-        <Member type="Method">public void loadSettings()</Member>
+        <Member type="Field">private HashMap&lt;String, String&gt; savedDicts</Member>
+        <Member type="Method">public static void loadSettings()</Member>
         <Member type="Method">public void changeSettings()</Member>
+        <Member type="Method">public void saveSettings()</Member>
         <Modifier>None</Modifier>
       </Entity>
       <Entity type="Class">
         <Name>Menu</Name>
         <Access>Public</Access>
-        <Location left="711" top="300" />
+        <Location left="887" top="10" />
         <Size width="162" height="216" />
         <Collapsed>False</Collapsed>
         <Member type="Field">private Item open</Member>
@@ -58,9 +61,41 @@
         <Location left="91" top="7" />
         <Size width="162" height="216" />
         <Collapsed>False</Collapsed>
-        <Member type="Field">private int dictonary</Member>
+        <Member type="Field">private Map &lt;String, Dictonary&gt; dictonaries</Member>
         <Member type="Field">private UI ui</Member>
         <Member type="Field">private Settings setings</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Comment">
+        <Text>Settings, Logger are singleton</Text>
+        <Location left="358" top="235" />
+        <Size width="160" height="75" />
+      </Entity>
+      <Entity type="Class">
+        <Name>Loader</Name>
+        <Access>Public</Access>
+        <Location left="255" top="534" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public static void load(String filePath)</Member>
+        <Member type="Method">private generic &lt;T&gt; loadDict()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Formatter</Name>
+        <Access>Public</Access>
+        <Location left="35" top="553" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public static void load(String filePath)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Logger</Name>
+        <Access>Public</Access>
+        <Location left="474" top="174" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
         <Modifier>None</Modifier>
       </Entity>
     </Entities>
@@ -68,15 +103,15 @@
       <Relationship type="Association" first="3" second="1">
         <Label>
         </Label>
-        <StartOrientation>Vertical</StartOrientation>
+        <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <BendPoint relativeToStartShape="True">
-          <X>708</X>
-          <Y>275</Y>
+          <X>862</X>
+          <Y>32</Y>
         </BendPoint>
         <BendPoint relativeToStartShape="False">
-          <X>660</X>
-          <Y>210</Y>
+          <X>846</X>
+          <Y>159</Y>
         </BendPoint>
         <Direction>Unidirectional</Direction>
         <AssociationType>Aggregation</AssociationType>
@@ -99,8 +134,8 @@
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <BendPoint relativeToStartShape="True">
-          <X>448</X>
-          <Y>83</Y>
+          <X>634</X>
+          <Y>32</Y>
         </BendPoint>
         <BendPoint relativeToStartShape="False">
           <X>278</X>
@@ -118,6 +153,54 @@
           <X>278</X>
           <Y>109</Y>
         </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="8" second="4">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>524</X>
+          <Y>105</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="6" second="0">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>222</X>
+          <Y>460</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="6" second="2">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>418</X>
+          <Y>509</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>308</X>
+          <Y>439</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="7" second="0">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
         <Direction>Unidirectional</Direction>
         <AssociationType>Aggregation</AssociationType>
       </Relationship>
