@@ -7,7 +7,7 @@
       <Entity type="Class">
         <Name>Dictonary</Name>
         <Access>Default</Access>
-        <Location left="35" top="277" />
+        <Location left="35" top="247" />
         <Size width="162" height="216" />
         <Collapsed>False</Collapsed>
         <Member type="Field">private TreeMap&lt;String&gt; dictMap</Member>
@@ -35,7 +35,7 @@
       <Entity type="Class">
         <Name>Settings</Name>
         <Access>Public</Access>
-        <Location left="268" top="197" />
+        <Location left="277" top="154" />
         <Size width="162" height="216" />
         <Collapsed>False</Collapsed>
         <Member type="Field">private String currentDictPath</Member>
@@ -72,16 +72,6 @@
         <Size width="160" height="75" />
       </Entity>
       <Entity type="Class">
-        <Name>Loader</Name>
-        <Access>Public</Access>
-        <Location left="255" top="534" />
-        <Size width="162" height="216" />
-        <Collapsed>False</Collapsed>
-        <Member type="Method">public static void load(String filePath)</Member>
-        <Member type="Method">private generic &lt;T&gt; loadDict()</Member>
-        <Modifier>None</Modifier>
-      </Entity>
-      <Entity type="Class">
         <Name>Formatter</Name>
         <Access>Public</Access>
         <Location left="35" top="553" />
@@ -93,7 +83,7 @@
       <Entity type="Class">
         <Name>Logger</Name>
         <Access>Public</Access>
-        <Location left="474" top="174" />
+        <Location left="467" top="154" />
         <Size width="162" height="216" />
         <Collapsed>False</Collapsed>
         <Modifier>None</Modifier>
@@ -101,8 +91,6 @@
     </Entities>
     <Relationships>
       <Relationship type="Association" first="3" second="1">
-        <Label>
-        </Label>
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <BendPoint relativeToStartShape="True">
@@ -117,8 +105,6 @@
         <AssociationType>Aggregation</AssociationType>
       </Relationship>
       <Relationship type="Association" first="0" second="4">
-        <Label>
-        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <BendPoint relativeToStartShape="False">
@@ -129,8 +115,6 @@
         <AssociationType>Aggregation</AssociationType>
       </Relationship>
       <Relationship type="Association" first="1" second="4">
-        <Label>
-        </Label>
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <BendPoint relativeToStartShape="True">
@@ -145,8 +129,6 @@
         <AssociationType>Aggregation</AssociationType>
       </Relationship>
       <Relationship type="Association" first="2" second="4">
-        <Label>
-        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <BendPoint relativeToStartShape="False">
@@ -156,49 +138,17 @@
         <Direction>Unidirectional</Direction>
         <AssociationType>Aggregation</AssociationType>
       </Relationship>
-      <Relationship type="Association" first="8" second="4">
-        <Label>
-        </Label>
+      <Relationship type="Association" first="7" second="4">
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <BendPoint relativeToStartShape="True">
-          <X>524</X>
-          <Y>105</Y>
+          <X>517</X>
+          <Y>85</Y>
         </BendPoint>
         <Direction>Unidirectional</Direction>
         <AssociationType>Aggregation</AssociationType>
       </Relationship>
       <Relationship type="Association" first="6" second="0">
-        <Label>
-        </Label>
-        <StartOrientation>Vertical</StartOrientation>
-        <EndOrientation>Horizontal</EndOrientation>
-        <BendPoint relativeToStartShape="False">
-          <X>222</X>
-          <Y>460</Y>
-        </BendPoint>
-        <Direction>Unidirectional</Direction>
-        <AssociationType>Aggregation</AssociationType>
-      </Relationship>
-      <Relationship type="Association" first="6" second="2">
-        <Label>
-        </Label>
-        <StartOrientation>Vertical</StartOrientation>
-        <EndOrientation>Vertical</EndOrientation>
-        <BendPoint relativeToStartShape="True">
-          <X>418</X>
-          <Y>509</Y>
-        </BendPoint>
-        <BendPoint relativeToStartShape="False">
-          <X>308</X>
-          <Y>439</Y>
-        </BendPoint>
-        <Direction>Unidirectional</Direction>
-        <AssociationType>Aggregation</AssociationType>
-      </Relationship>
-      <Relationship type="Association" first="7" second="0">
-        <Label>
-        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <Direction>Unidirectional</Direction>

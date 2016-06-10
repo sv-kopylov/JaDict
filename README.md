@@ -1,4 +1,3 @@
 # JaDict
-The chell for view zdb dict files 
-The purpose is to make the thell for zdb dictonaries with comfortable finger frendly interface 
-for windows devices.
+The chell for view zd dict files 
+The main purpose is to make the thell for zd dictonaries with comfortable finger frendly interface for windows devices.

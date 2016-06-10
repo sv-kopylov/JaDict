@@ -2,7 +2,7 @@ Tasks
 08.06.16
 01 - make fomatter
 02 - loader algorothm revision
-02 - separate loader class -
+02 - separate loader class - bad idea, tasc lived
 04 - debugging saveBin and loadBin ++
 05 - makezd start from app
 06 - makezd sourcess and licenses search
@@ -10,4 +10,6 @@ Tasks
 08 - setngs: save dict name after parsing (loading  from txt), every load - scan isExist saved dics
 09 - make Logger singleton, add conditional logging
 10 - think about relative paths ++
+11 - revision of class members in UML diagram (periodicly)
+12 - make logger open for open log file for adding
 

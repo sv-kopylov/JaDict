@@ -12,13 +12,21 @@ import java.io.Serializable;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
-/**
- *
- * @author Сергей
- */
 public class Dictonary implements Serializable {
+    // interface  
+    public String name;
+    public String getArticle(String key) {
+        String article = null;
+        if (key != null) {
+            article = key+"  "+dictMap.get(key);
+        }
+        return article;
+    }
+    public String[] getList(String key, int width){
+    String[] str = new String[width];
+    return str;
+    }
 
   
     public final String dictName=null;
@@ -27,9 +35,37 @@ public class Dictonary implements Serializable {
     Settings settings = Settings.getInstance();
     private final long MAX = settings.MAX_FILE_SIZE_MB * 1024 * 1024;
     String filePath = settings.defaultFilePath;
+    
+    static int load(String path) {
+        int status = Settings.FAIL;
+        if (path.endsWith(".txt")) {
+            status = parse(path);
+            save();
+            status = Settings.SUCCESS;
+        } else if (path.endsWith(".zd")) {
+            formatAndParse(d, path);
+            status = Settings.SUCCESS;;
+        } else if (path.endsWith(".d")) {
+            File file = new File(path);
+            try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream(file));) {
+                d = (Dictonary) oi.readObject();
+                status = Settings.SUCCESS;;
+            } catch (IOException ex) {
+                Logger.getInstance().log("class: SaverLoader, method: load(Dictonary,String), cannot find file");
+            } catch (ClassNotFoundException ex) {
+                Logger.getInstance().log("class: SaverLoader, method: load(Dictonary,String), cannot find class");
+            }
+            //-d
+            System.out.println("loaded");
 
-    String load(String filePath) {
-        String message = "fail";
+        }
+        return status;
+    }
+    
+    
+
+    int load(String filePath) {
+        int status = Settings.FAIL;
         char ch;
         int nextCh;
         File dicFile = new File(filePath);
@@ -74,25 +110,23 @@ ch = (char) nextCh;
 
                     }
 
-                    message = "Success";
+                    status=Settings.SUCCESS;
 
                 } catch (FileNotFoundException ex) {
-                    message = "FileNotFound";
+//-d                    
+                    System.out.println("FileNotFound");
+                    Logger.getInstance().log("FileNotFound");
                 } catch (IOException ex) {
-                    message = "FileCantBeRed";
+                    System.out.println("FileCantBeRead");
+                    Logger.getInstance().log("FileCantBeRead");
+                          
                 }
             }
         }
-        return message;
+        return status;
     }
 
-    public String getArticle(String key) {
-        String article = null;
-        if (key != null) {
-            article = key+"  "+dictMap.get(key);
-        }
-        return article;
-    }
+ 
 
 //-d 
     void showSet() {
@@ -101,30 +135,20 @@ ch = (char) nextCh;
         }
     }
 
-    void saveDic() throws IOException {
-        File file = new File("C:\\Projects\\JaDict\\dict.dict");
-        ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(file));
-        oo.writeObject(this);
-//-d
-        System.out.println("saved");
-
-    }
-
-    static Dictonary loadDic()  {
-        Dictonary dic = null;// = new Dictonary();
-        File file = new File("C:\\Projects\\JaDict\\dict.dict");
-       
-        try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream(file));){
-            dic = (Dictonary) oi.readObject();
+   private void save() {
+        File file = new File(settings.dictsFolderPath + name + settings.RESOLUTION);
+        try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(file));){
+           oo.writeObject(this);  
         } catch (IOException ex) {
-            System.out.println("не могу найти файл");
-        } catch (ClassNotFoundException ex) {
-            System.out.println("проблемы с поиском класса");
+ //-d 
+            System.out.println("class: Dictonary, method: save, IOException");
+            Logger.getInstance().log("class: Dictonary, method: save, IOException");
         }
-       //-d
-        System.out.println("loaded");
-        
-        return dic;
+       
+//-d
+        System.out.println("saved"+file.getAbsolutePath());
 
     }
+
+  
 }
