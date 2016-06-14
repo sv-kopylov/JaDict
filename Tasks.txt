@@ -12,8 +12,8 @@ Tasks
 10 - think about relative paths ++
 11 - revision of class members in UML diagram (periodicly)
 12 - make logger open for open log file for adding
-
 14 - add fabric instead ctor to Dictonary class
 15 - implement formatAndParse method
 16 - implement wayting makezd finish
 17 - implement scanning subdirectories
+18 - implement load and save settings

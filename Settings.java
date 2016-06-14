@@ -16,7 +16,7 @@ public class Settings implements Serializable {
 
     String dFileResolution = ".d";
     String sFileResolution = ".s";
-    int MAX_FILE_SIZE_MB = 10;
+    int MAX_FILE_SIZE_MB = 100;
     String lastDictFilePath = "C:\\Projects\\JaDict\\1.txt";
     String dictsFolderPath = "dicts\\";
     String dictLoggPath = "log\\log.txt";

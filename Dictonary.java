@@ -1,11 +1,13 @@
 package jadict;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -20,9 +22,11 @@ public class Dictonary implements Serializable {
 
     public String getArticle(String key) {
         String article = null;
-        if (key != null) {
-            article = key + "  " + dictMap.get(key)!=null?dictMap.get(key):"Article no found";
-        }
+        String result = null;
+        if ((key != null)&&(dictMap!=null)) {
+  
+        article = key + "  " + dictMap.get(key) != null ? dictMap.get(key) : "Article no found";
+        } 
         return article;
     }
 
@@ -34,15 +38,28 @@ public class Dictonary implements Serializable {
 // the main variables
     private TreeMap<String, String> dictMap = null;
     private TreeSet<String> dictSet = null;
-    Settings settings = Settings.getInstance();
+    private Settings settings = Settings.getInstance();
     private final long MAX = settings.MAX_FILE_SIZE_MB * 1024 * 1024;
-    String filePath = settings.lastDictFilePath;
+    private String filePath = settings.lastDictFilePath;
 
-    // ctor
+  // ctor
     public Dictonary() {
 
     }
-    // ctor
+  // ctor
+    public Dictonary(String path) {
+        if (path.endsWith(".txt")) {
+            parse(path);
+        } else if (path.endsWith(".zd")) {
+            formatAndParse(path);
+        } else {
+//-d                    
+            System.out.println("ctor: incorrect file format");
+            Logger.getInstance().log("ctor: incorrect file format");
+
+        }
+    }
+
 
 //-d 
     void showSet() {
@@ -50,19 +67,8 @@ public class Dictonary implements Serializable {
             System.out.println(s);
         }
     }
-    public Dictonary(String path) {
-        if (path.endsWith(".txt")) {
-            parse(path);
-        } else if (path.endsWith(".zd")) {
-            formatAndParse(path);
-        } else {
-            //-d                    
-            System.out.println("ctor: incorrect file format");
-            Logger.getInstance().log("ctor: incorrect file format");
 
-        }
-    }
-
+    
     public static Dictonary getSavedInstance(String path) {
         Dictonary instance = null;
         if (path.endsWith(".d")) {
@@ -89,7 +95,6 @@ public class Dictonary implements Serializable {
         return instance;
     }
 
-   
     private int parse(String path) {
         int status = Settings.FAIL;
         char ch;
@@ -97,12 +102,13 @@ public class Dictonary implements Serializable {
         File dicFile = new File(path);
         name = dicFile.getName();
         name = name.substring(0, name.lastIndexOf('.'));
+        
 
         if (dicFile.exists() && dicFile.canRead() && (dicFile.length() > 0)) {
             if ((dicFile.length() < MAX)) {
                 try (FileReader fr = new FileReader(dicFile);) {
                     StringBuilder sb = new StringBuilder();
-                    String key=null;
+                    String key = null;
                     String value;
                     dictSet = new TreeSet<>();
                     dictMap = new TreeMap<>();
@@ -144,15 +150,18 @@ public class Dictonary implements Serializable {
                     Logger.getInstance().log("FileNotFound");
                 } catch (IOException ex) {
 //-d
-                    System.out.println("FileCantBeRead");
-                    Logger.getInstance().log("FileCantBeRead");
+            
 
                 }
-            }
-        }
         save();
         settings.addSavedDict(name, settings.dictsFolderPath);
         settings.addRunningDict(name, this);
+            }  else {
+                    System.out.println("class: Dictonary, method: formatAndParse, file too big, change settings");
+                    Logger.getInstance().log("class: Dictonary, method: formatAndParse, file too big, change settings");
+            }
+        }
+        
         return status;
     }
 
@@ -168,16 +177,42 @@ public class Dictonary implements Serializable {
             Logger.getInstance().log("class: Dictonary, method: save, IOException");
         }
 
-
-
     }
 
     private int formatAndParse(String path) {
         int status = Settings.FAIL;
-//        ProcessBuilder pb = new ProcessBuilder(makezdLocation," -u ", path, );
-        return status;
+        Settings s = Settings.getInstance();
+        String makezdMessage = "nothing";
+        String inerName = path.substring(path.lastIndexOf('\\')+1, path.indexOf('.'));
 
+        if (path.endsWith(".zd")) {
+            String txtName = inerName + ".txt";
+            ProcessBuilder pb = new ProcessBuilder();
+            pb.command(s.dictsFolderPath + "makezd.exe", "-u", path, s.dictsFolderPath + txtName);
+            try {
+                Process p = pb.start();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                StringBuilder builder = new StringBuilder();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    builder.append(line);
+                }
+                makezdMessage = builder.toString();
+            } catch (IOException ex) {
+//-d    
+                System.out.println("class: Dictonary, method: formatAndParse, IOException");
+                Logger.getInstance().log("class: Dictonary, method: formatAndParse, IOException");
+            }
+
+            if (makezdMessage.contains("Unpack done")) {
+                parse(s.dictsFolderPath + txtName);
+//                File file = new File(s.dictsFolderPath + txtName);
+//                file.delete();
+                status = Settings.SUCCESS;
+            } 
+            
+        }
+        return status;
     }
 
-    
-}
+} // class ends
