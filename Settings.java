@@ -21,6 +21,7 @@ public class Settings implements Serializable {
     String dictsFolderPath = "dicts\\";
     String dictLoggPath = "log\\log.txt";
     String dictSettingsPath = "settings\\";
+    String makezdLocation = "makezd\\makezd.exe";
 
     // Saved Dicts list
     private HashMap<String, String> savedDicts = new HashMap<>();

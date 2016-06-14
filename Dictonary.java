@@ -174,8 +174,10 @@ public class Dictonary implements Serializable {
 
     private int formatAndParse(String path) {
         int status = Settings.FAIL;
+//        ProcessBuilder pb = new ProcessBuilder(makezdLocation," -u ", path, );
         return status;
 
     }
 
+    
 }
