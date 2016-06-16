@@ -16,8 +16,8 @@ import java.util.GregorianCalendar;
  */
 public class Logger {
    
-    File file;
-    FileWriter fw;
+    private File file;
+    private FileWriter fw;
     static final int MAX = 10;
     int ctr = 0;
    
@@ -34,16 +34,19 @@ public class Logger {
             sb.append(s);
             sb.append(": ");
         }
+        sb.append("\n");
         try {
+            
             fw.write(sb.toString());
             ctr++;
-            fw.close();
+            
             if (ctr>=MAX){
              file.delete();
              file = new File(Settings.getInstance().dictLoggPath);
+             ctr=0;
             }
         } catch (IOException ex) {
-            System.out.println(curTime()+" ошибка записи файла");
+            System.out.println(curTime()+" ошибка записи файла в лог");
         }
         
         
@@ -60,7 +63,10 @@ public static Logger getInstance (){
 private Logger()  {
         file = new File(Settings.getInstance().dictLoggPath);
         try {
+           
+            
             fw = new FileWriter(file);
+            
         } catch (IOException ex) {
             System.out.println("Ошибка ввода - вывода в логере");
         }

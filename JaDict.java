@@ -5,10 +5,9 @@
  */
 package jadict;
 
-import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 
 /**
@@ -21,51 +20,24 @@ public class JaDict {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException  {
-                
-        Settings s = Settings.getInstance();
-//        Dictonary d = new Dictonary(s.dictsFolderPath+"BigEnc2.d");
-        Dictonary d = new Dictonary("C:\\Projects\\JaDict\\BigEnc2.zd");
+
+     
+//String str = "-балльный  1. ";
+//        char[] a = str.toCharArray();
+//        for (int i=0; i<str.length();i++){
+//            System.out.println(Character.codePointAt(a, i));  
+//        }
+        
+
+            
+        
+        
+//        Dictonary d = Dictonary.getSavedInstance(s.dictsFolderPath+"BigEnc2.d");
+        Dictonary d = new Dictonary("C:\\programs\\JaDict\\dicts\\eng2Fre.txt");
         System.out.println(d.name);
-        System.out.println(d.getArticle("яхонт"));
-        
-//Settings s = Settings.getInstance();
-//ProcessBuilder pb = new ProcessBuilder();
-//pb.directory(new File(s.dictsFolderPath));
-//pb.command("makezd.exe","-u","eng2FRASS.zd","eng2FRASS.txt");
-//Process p = pb.start();
-//
-//BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-//StringBuilder builder = new StringBuilder();
-//String line = null;
-//while ( (line = reader.readLine()) != null) {
-//   builder.append(line);
-////   builder.append(System.getProperty("line.separator"));
-//}
-//String result = builder.toString();
-//     
-//        System.out.println(result);
-//           System.out.println("red");
-//
-
-        
-
-
-
-
-
-
-        
-       
-
-        
-        
-        
-    
-
-        
-
-        
-   
+        d.showSet();
+//        System.out.println(d.getArticle("АБСУРД"));
+         
   
     }
     

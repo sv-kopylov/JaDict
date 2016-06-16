@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
@@ -24,10 +25,13 @@ public class Dictonary implements Serializable {
         String article = null;
         String result = null;
         if ((key != null)&&(dictMap!=null)) {
-  
-        article = key + "  " + dictMap.get(key) != null ? dictMap.get(key) : "Article no found";
+            article=dictMap.get(key);
+            if (article!=null){
+                result=key + "  "+article;
+            }
+        
         } 
-        return article;
+        return result;
     }
 
     public String[] getList(String key, int width) {
@@ -62,9 +66,14 @@ public class Dictonary implements Serializable {
 
 
 //-d 
-    void showSet() {
-        for (String s : dictSet) {
-            System.out.println(s);
+    void showSet() throws IOException {
+         Settings s = Settings.getInstance();
+    File f = new File (s.dictsFolderPath + "log.txt");
+    FileWriter fwr = new FileWriter(f);
+    
+        for (String str : dictSet) {
+            fwr.write(str + "\n");
+            System.out.println(str);
         }
     }
 
@@ -106,7 +115,11 @@ public class Dictonary implements Serializable {
 
         if (dicFile.exists() && dicFile.canRead() && (dicFile.length() > 0)) {
             if ((dicFile.length() < MAX)) {
-                try (FileReader fr = new FileReader(dicFile);) {
+                try (BufferedReader fr = new BufferedReader(
+                    new InputStreamReader(
+                            new FileInputStream(dicFile), "windows-1251"))){
+                        
+//                        FileReader fr = new FileReader(dicFile)) {
                     StringBuilder sb = new StringBuilder();
                     String key = null;
                     String value;
@@ -115,15 +128,22 @@ public class Dictonary implements Serializable {
 
                     nextCh = fr.read();
                     ch = (char) nextCh;
+
+                   
                     while (nextCh != -1) {
                         if ((ch != ' ') && (ch != '\r')) {
                             sb.append(ch);
 
                         } else {
                             nextCh = fr.read();
+                             
                             ch = (char) nextCh;
+                         
                             if (ch == ' ') {
                                 key = sb.toString();
+                              
+                                Logger.getInstance().log(key);
+                                
                                 dictSet.add(key);
 
                                 sb.delete(0, sb.length());
