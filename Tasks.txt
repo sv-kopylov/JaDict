@@ -2,18 +2,22 @@ Tasks
 08.06.16
 01 - make fomatter
 02 - loader algorothm revision
-02 - separate loader class - bad idea, tasc lived
-04 - debugging saveBin and loadBin ++
-05 - think about makezd start from app ++
+02 - separate loader class - bad idea, task abandoned
+04 + debugging saveBin and loadBin ++
+05 + think about makezd start from app ++
 06 - makezd sourcess and licenses search
-07 - edit readme - not zdb but zd format++
-08 - setings: save dict name after parsing (loading  from txt)++, every load - scan isExist saved dics
-09 - make Logger singleton ++, add conditional logging
-10 - think about relative paths ++
+07 + edit readme - not zdb but zd format++
+08 + setings: save dict name after parsing (loading  from txt)++, 
+
+09 + make Logger singleton ++, 
+10 + think about relative paths ++
 11 - revision of class members in UML diagram (periodicly)
-12 - make logger open for open log file for adding
-14 - add fabric instead ctor to Dictonary class
-15 - implement formatAndParse method
-16 - implement wayting makezd finish
+
+14 + add fabric instead ctor to Dictonary class ++
+15 + implement formatAndParse method
+16 + implement wayting makezd finish
 17 - implement scanning subdirectories
 18 - implement load and save settings
+19 - think about user friendly encoding
+20 - every load - scan isExist saved dics
+21 - think and inplement prompt list algorithm

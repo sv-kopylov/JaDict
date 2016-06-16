@@ -18,9 +18,8 @@ import java.util.logging.Level;
 
 public class Dictonary implements Serializable {
 
-    // interface  
+// interface  
     public String name;
-
     public String getArticle(String key) {
         String article = null;
         String result = null;
@@ -33,12 +32,22 @@ public class Dictonary implements Serializable {
         } 
         return result;
     }
-
     public String[] getList(String key, int width) {
         String[] str = new String[width];
         return str;
     }
-
+    public static Dictonary getInstance (String path){
+        Dictonary instance = null;
+        if (path!=null&&path.length()>0){
+            if (path.endsWith(".d")){
+                instance = getSavedInstance(path);
+            } else 
+            if (path.endsWith(".txt")||path.endsWith(".zd")){
+                instance = new Dictonary(path);
+            }
+        }
+        return instance;
+    }
 // the main variables
     private TreeMap<String, String> dictMap = null;
     private TreeSet<String> dictSet = null;
@@ -47,11 +56,11 @@ public class Dictonary implements Serializable {
     private String filePath = settings.lastDictFilePath;
 
   // ctor
-    public Dictonary() {
+    private Dictonary() {
 
     }
   // ctor
-    public Dictonary(String path) {
+    private Dictonary(String path) {
         if (path.endsWith(".txt")) {
             parse(path);
         } else if (path.endsWith(".zd")) {
@@ -63,22 +72,8 @@ public class Dictonary implements Serializable {
 
         }
     }
-
-
-//-d 
-    void showSet() throws IOException {
-         Settings s = Settings.getInstance();
-    File f = new File (s.dictsFolderPath + "log.txt");
-    FileWriter fwr = new FileWriter(f);
     
-        for (String str : dictSet) {
-            fwr.write(str + "\n");
-            System.out.println(str);
-        }
-    }
-
-    
-    public static Dictonary getSavedInstance(String path) {
+    private static Dictonary getSavedInstance(String path) {
         Dictonary instance = null;
         if (path.endsWith(".d")) {
             File file = new File(path);
@@ -117,35 +112,27 @@ public class Dictonary implements Serializable {
             if ((dicFile.length() < MAX)) {
                 try (BufferedReader fr = new BufferedReader(
                     new InputStreamReader(
-                            new FileInputStream(dicFile), "windows-1251"))){
-                        
-//                        FileReader fr = new FileReader(dicFile)) {
+                            new FileInputStream(dicFile), settings.encoding))){
+                    
                     StringBuilder sb = new StringBuilder();
                     String key = null;
                     String value;
                     dictSet = new TreeSet<>();
                     dictMap = new TreeMap<>();
 
+                    
                     nextCh = fr.read();
                     ch = (char) nextCh;
-
-                   
+                    
                     while (nextCh != -1) {
                         if ((ch != ' ') && (ch != '\r')) {
                             sb.append(ch);
-
                         } else {
                             nextCh = fr.read();
-                             
                             ch = (char) nextCh;
-                         
                             if (ch == ' ') {
                                 key = sb.toString();
-                              
-                                Logger.getInstance().log(key);
-                                
                                 dictSet.add(key);
-
                                 sb.delete(0, sb.length());
                             } else if (ch == '\n') {
                                 value = sb.toString();
@@ -154,31 +141,27 @@ public class Dictonary implements Serializable {
                             } else {
                                 sb.append(' ');
                                 sb.append(ch);
-
                             }
                         }
                         nextCh = fr.read();
                         ch = (char) nextCh;
-
                     }
 
                     status = Settings.SUCCESS;
-
                 } catch (FileNotFoundException ex) {
-//-d                    
-                    System.out.println("FileNotFound");
-                    Logger.getInstance().log("FileNotFound");
+                    System.out.println("class: Dictonary, method: parse, FileNotFoundException");
+                    Logger.getInstance().log("class: Dictonary, method: parse, FileNotFoundException");
                 } catch (IOException ex) {
-//-d
-            
+                    System.out.println("class: Dictonary, method: parse, IOexception");
+                    Logger.getInstance().log("class: Dictonary, method: parse, IOexception");
 
                 }
         save();
         settings.addSavedDict(name, settings.dictsFolderPath);
         settings.addRunningDict(name, this);
             }  else {
-                    System.out.println("class: Dictonary, method: formatAndParse, file too big, change settings");
-                    Logger.getInstance().log("class: Dictonary, method: formatAndParse, file too big, change settings");
+                    System.out.println("class: Dictonary, method: parse, file too big, change settings");
+                    Logger.getInstance().log("class: Dictonary, method: parse, file too big, change settings");
             }
         }
         
@@ -188,11 +171,9 @@ public class Dictonary implements Serializable {
     private void save() {
 
         File file = new File(settings.dictsFolderPath + name + settings.dFileResolution);
-        System.out.println(file.getAbsolutePath());
         try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(file));) {
             oo.writeObject(this);
         } catch (IOException ex) {
-            //-d 
             System.out.println("class: Dictonary, method: save, IOException");
             Logger.getInstance().log("class: Dictonary, method: save, IOException");
         }
@@ -219,20 +200,32 @@ public class Dictonary implements Serializable {
                 }
                 makezdMessage = builder.toString();
             } catch (IOException ex) {
-//-d    
                 System.out.println("class: Dictonary, method: formatAndParse, IOException");
                 Logger.getInstance().log("class: Dictonary, method: formatAndParse, IOException");
             }
 
             if (makezdMessage.contains("Unpack done")) {
                 parse(s.dictsFolderPath + txtName);
-//                File file = new File(s.dictsFolderPath + txtName);
-//                file.delete();
+                File file = new File(s.dictsFolderPath + txtName);
+                file.delete();
                 status = Settings.SUCCESS;
             } 
             
         }
         return status;
     }
+
+//-d 
+    void showSet() throws IOException {
+         Settings s = Settings.getInstance();
+    File f = new File (s.dictsFolderPath + "log.txt");
+    FileWriter fwr = new FileWriter(f);
+    
+        for (String str : dictSet) {
+            fwr.write(str + "\n");
+            System.out.println(str);
+        }
+    }
+
 
 } // class ends
