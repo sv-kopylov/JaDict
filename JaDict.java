@@ -21,7 +21,8 @@ public class JaDict {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException  {
-
+Settings s = Settings.getInstance();
+s.scanDicts(s.dictsFolderPath);
      
 //String str = "-балльный  1. ";
 //        char[] a = str.toCharArray();
@@ -35,20 +36,20 @@ public class JaDict {
         
 //        Dictonary d = Dictonary.getSavedInstance(s.dictsFolderPath+"BigEnc2.d");
 //        Dictonary d = Dictonary.getSavedInstance("C:\\programs\\JaDict\\dicts\\Eng2Fre.d");
-        Dictonary d = Dictonary.getInstance("C:\\programs\\JaDict\\dicts\\eng2Feng_rus_eng.txt");
-        System.out.println(d.name);
-//        d.showSet();
-Logger l = Logger.getInstance();
-Scanner s = new Scanner(System.in);
-String st = "";
-st = s.next();
-while (!st.equals("q")){
-    System.out.println(st);
-    System.out.println(d.getArticle(st));
-    l.log(d.getArticle(st));
-    st = s.next();
+//        Dictonary d = Dictonary.getInstance("C:\\programs\\JaDict\\dicts\\eng2Feng_rus_eng.txt");
+//        System.out.println(d.name);
+////        d.showSet();
+//Logger l = Logger.getInstance();
+//Scanner s = new Scanner(System.in);
+//String st = "";
+//st = s.next();
+//while (!st.equals("q")){
+//    System.out.println(st);
+//    System.out.println(d.getArticle(st));
+//    l.log(d.getArticle(st));
+//    st = s.next();
     
-}
+//}
         
          
   

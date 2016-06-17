@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.logging.Level;
@@ -50,7 +51,7 @@ public class Dictonary implements Serializable {
     }
 // the main variables
     private TreeMap<String, String> dictMap = null;
-    private TreeSet<String> dictSet = null;
+    private LinkedHashSet<String> dictSet = null;
     private Settings settings = Settings.getInstance();
     private final long MAX = settings.MAX_FILE_SIZE_MB * 1024 * 1024;
     private String filePath = settings.lastDictFilePath;
@@ -81,12 +82,12 @@ public class Dictonary implements Serializable {
                 instance = (Dictonary) oi.readObject();
             } catch (IOException ex) {
 // -d
-                System.out.println("class: Dictonary, method: load(Dictonary,String), cannot find file");
-                Logger.getInstance().log("class: SaverLoader, method: load(Dictonary,String), cannot find file");
+                System.out.println("class: Dictonary, method: getSavedInstance(String path), IOException");
+                Logger.getInstance().log("class: Dictonary, method: getSavedInstance(String path), IOException");
             } catch (ClassNotFoundException ex) {
 // -d
-                System.out.println("class: Dictonary, method: load(Dictonary,String), cannot find class");
-                Logger.getInstance().log("class: Dictonary, method: load(Dictonary,String), cannot find class");
+                System.out.println("class: Dictonary, method: getSavedInstance(String path), ClassNotFoundException");
+                Logger.getInstance().log("class: Dictonary, method: getSavedInstance(String path), ClassNotFoundException");
             }
 
         } else {
@@ -117,7 +118,7 @@ public class Dictonary implements Serializable {
                     StringBuilder sb = new StringBuilder();
                     String key = null;
                     String value;
-                    dictSet = new TreeSet<>();
+                    dictSet = new LinkedHashSet<>();
                     dictMap = new TreeMap<>();
 
                     

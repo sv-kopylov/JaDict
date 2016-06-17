@@ -1,75 +1,144 @@
 package jadict;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeSet;
 
 /**
  *
  * @author Сергей
  */
 public class Settings implements Serializable {
-//    here all common system variables
+// Interface
+    public static Settings getInstance() {
+        if (unicInstance == null) {
+            unicInstance = getSavedInstance();
+            if (unicInstance==null){
+            unicInstance = new Settings();
+            }
+        }
+        return unicInstance;
+    }
 
-    public static int SUCCESS = 1;
-    public static int FAIL = 2;
+//    statics
+    private static Settings unicInstance;
+ 
+    private static final String DICT_SETTINGS_FILE = "settings\\settings.s";
     
     private static final String UTF = "UTF-8";
     private static final String W1251 = "windows-1251";
+    
+    public static int SUCCESS = 1;
+    public static int FAIL = 2;
+   
+//   settings availabel to user 
     String encoding = UTF;
-   
     int MAX_FILE_SIZE_MB = 100;
-
-   
-    String dFileResolution = ".d";
-    String sFileResolution = ".s";
-
-    String lastDictFilePath = "C:\\Projects\\JaDict\\1.txt";
+    
     String dictsFolderPath = "dicts\\";
+    String dFileResolution = ".d";
     String dictLoggPath = "log\\log.txt";
-    String dictSettingsPath = "settings\\";
-    String makezdLocation = "makezd\\makezd.exe";
-
-    // Saved Dicts list
+    String lastDictFilePath = null;
+   
+// Saved Dicts list
     private HashMap<String, String> savedDicts = new HashMap<>();
 
-    public void addSavedDict(String key, String path) {
-        savedDicts.put(key, path);
+    public void addSavedDict(String name, String path) {
+        savedDicts.put(name, path);
+        save();
     }
-
     public String getSavedDictPath(String key) {
         return savedDicts.get(key);
     }
-
     public void delFromSavedDictList(String key) {
         savedDicts.remove(key);
+        save();
     }
 
-//     Running Dicts List
+//  Running Dicts List
     transient private HashMap<String, Dictonary> runningDicts = new HashMap<>();
 
     public void addRunningDict(String key, Dictonary dict) {
         runningDicts.put(key, dict);
     }
-
     public Dictonary getRunningDict(String key) {
         return runningDicts.get(key);
     }
-
     public void delRunningDictList(String key) {
         runningDicts.remove(key);
     }
 
-//   here singleton mechanism
+//   private ctor
     private Settings() { // ctor
     }
-
-    static Settings getInstance() {
-        if (unicInstance == null) {
-            unicInstance = new Settings();
+ 
+   
+    void save(){
+         File file = new File(DICT_SETTINGS_FILE);
+        try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(file));) {
+            oo.writeObject(this);
+            oo.close();
+        } catch (IOException ex) {
+            System.out.println("class: Settings, method: save, IOException");
+            Logger.getInstance().log("class: Settings, method: save, IOException");
         }
-        return unicInstance;
     }
-    private static Settings unicInstance;
+    
+    private static Settings getSavedInstance() {
+        Settings instance = null;
+        File file = new File(DICT_SETTINGS_FILE);
+        if (file.exists()&&file.length()>0){
+            try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream(file));) {
+                instance = (Settings) oi.readObject();
+            } catch (IOException ex) {
+// -d
+                System.out.println("class: Settings, method: getSavedInstance(), IOException");
+                Logger.getInstance().log("class: Settings, method: getSavedInstance(), IOException");
+            } catch (ClassNotFoundException ex) {
+// -d
+                System.out.println("class: Settings, method: getSavedInstance(), ClassNotFoundException");
+                Logger.getInstance().log("class: Settings, method: getSavedInstance(), ClassNotFoundException");
+            }
+        }
+        return instance;
+    }
+    
+    public void scanDicts(String path){
+        TreeSet<String> zdFiles = new TreeSet<>();
+        TreeSet<String> dFiles = new TreeSet<>();
+        String dName;
+        
+        File file = new File (path);
+        File[] fileList = file.listFiles();
+        for (File f: fileList){
+            if (f.isDirectory()) {
+                scanDicts(f.getPath());
+            }
+            else {
+            dName = f.getName();
+            if (dName.endsWith(".zd")){
+                zdFiles.add(dName.substring(0, dName.indexOf(".")));
+            } else 
+                if (dName.endsWith(".d")){
+                    dFiles.add(dName.substring(0, dName.indexOf(".")));
+                }
+             }
+         }
+        for (String s: dFiles){
+            zdFiles.remove(s);
+        }
+        for (String s: zdFiles){
+            System.out.println(s);
+        }
+        
+        
+    }
 
-}
+} // class ends
