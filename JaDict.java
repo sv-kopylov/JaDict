@@ -17,12 +17,10 @@ import java.util.Scanner;
  */
 public class JaDict {
 
-    /**
-     * @param args the command line arguments
-     */
+ 
     public static void main(String[] args) throws IOException  {
 Settings s = Settings.getInstance();
-s.scanDicts(s.dictsFolderPath);
+s.scanUnconvertedDicts(s.dictsFolderPath);
      
 //String str = "-балльный  1. ";
 //        char[] a = str.toCharArray();
