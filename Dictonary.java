@@ -5,17 +5,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.logging.Level;
+import static javafx.collections.FXCollections.observableArrayList;
+import javafx.collections.ObservableList;
 
 public class Dictonary implements Serializable {
 
@@ -51,10 +51,10 @@ public class Dictonary implements Serializable {
     }
 // the main variables
     private TreeMap<String, String> dictMap = null;
-    private LinkedHashSet<String> dictSet = null;
+    private ArrayList<String> dictSet = null;
     private Settings settings = Settings.getInstance();
     private final long MAX = settings.MAX_FILE_SIZE_MB * 1024 * 1024;
-    private String filePath = settings.lastDictFilePath;
+ 
 
   // ctor
     private Dictonary() {
@@ -118,7 +118,7 @@ public class Dictonary implements Serializable {
                     StringBuilder sb = new StringBuilder();
                     String key = null;
                     String value;
-                    dictSet = new LinkedHashSet<>();
+                    dictSet = new ArrayList<>();
                     dictMap = new TreeMap<>();
 
                     
@@ -174,7 +174,9 @@ public class Dictonary implements Serializable {
         File file = new File(settings.dictsFolderPath + name + settings.dFileResolution);
         try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(file));) {
             oo.writeObject(this);
+            
         } catch (IOException ex) {
+            ex.printStackTrace();
             System.out.println("class: Dictonary, method: save, IOException");
             Logger.getInstance().log("class: Dictonary, method: save, IOException");
         }

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
 
@@ -146,21 +147,18 @@ public class Settings implements Serializable {
 
     }
 
-    public String[] scanAvalabelDicts(String path) {
-        TreeSet<String> dFiles = new TreeSet<>();
+    public  ArrayList<String> scanAvalabelDicts() {
+        ArrayList<String> dFiles = new ArrayList<>();
         String dName;
-        String[] resultArray = new String[0];
-        File file = new File(path);
+        File file = new File(dictsFolderPath);
         File[] fileList = file.listFiles();
         for (File f : fileList) {
-            dName = f.getName();
+            dName = f.getAbsolutePath();
             if (dName.endsWith(".d")) {
-                dFiles.add(dName.substring(0, dName.indexOf(".")));
+                dFiles.add(dName);
             }
         }
-
-        dFiles.toArray(resultArray);
-        return resultArray;
+        return dFiles;
 
     }
 
