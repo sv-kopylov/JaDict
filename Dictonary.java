@@ -14,7 +14,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.TreeMap;
-import static javafx.collections.FXCollections.observableArrayList;
+import java.util.TreeSet;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class Dictonary implements Serializable {
@@ -33,29 +34,46 @@ public class Dictonary implements Serializable {
         } 
         return result;
     }
-    public String[] getList(String key, int width) {
-        String[] str = new String[width];
-        return str;
+    public ArrayList<String> getList(String key, int width) {
+        ArrayList<String> arrayList = null;
+        if (key != null && width > 0) {
+            arrayList = new ArrayList<>();
+            if (dictSet != null) {
+                String str = dictSet.ceiling(key);
+                for (int i =0; i<width;i++){
+                    if (str!=null){
+                        arrayList.add(str);
+                        
+                    } else {
+                        arrayList.add("");
+                    }
+                    str = dictSet.higher(str);
+                }
+//                        
+            }
+        }
+
+        return arrayList;
     }
     public static Dictonary getInstance (String path){
         Dictonary instance = null;
         if (path!=null&&path.length()>0){
             if (path.endsWith(".d")){
                 instance = getSavedInstance(path);
+                Settings.getInstance().setLastDictFilePath(path);
             } else 
             if (path.endsWith(".txt")||path.endsWith(".zd")){
                 instance = new Dictonary(path);
+                Settings.getInstance().setLastDictFilePath(path);
             }
         }
         return instance;
     }
 // the main variables
     private TreeMap<String, String> dictMap = null;
-    private ArrayList<String> dictSet = null;
+    private TreeSet<String> dictSet = null;
     private Settings settings = Settings.getInstance();
     private final long MAX = settings.MAX_FILE_SIZE_MB * 1024 * 1024;
- 
-
   // ctor
     private Dictonary() {
 
@@ -118,7 +136,7 @@ public class Dictonary implements Serializable {
                     StringBuilder sb = new StringBuilder();
                     String key = null;
                     String value;
-                    dictSet = new ArrayList<>();
+                    dictSet = new TreeSet<>();
                     dictMap = new TreeMap<>();
 
                     
@@ -174,9 +192,7 @@ public class Dictonary implements Serializable {
         File file = new File(settings.dictsFolderPath + name + settings.dFileResolution);
         try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(file));) {
             oo.writeObject(this);
-            
         } catch (IOException ex) {
-            ex.printStackTrace();
             System.out.println("class: Dictonary, method: save, IOException");
             Logger.getInstance().log("class: Dictonary, method: save, IOException");
         }

@@ -39,15 +39,26 @@ public class Settings implements Serializable {
     public static int SUCCESS = 1;
     public static int FAIL = 2;
 
+    public String getLastDictFilePath() {
+        
+        return lastDictFilePath;
+        
+    }
 
+    public void setLastDictFilePath(String lastDictFilePath) {
+        this.lastDictFilePath = lastDictFilePath;
+        save();
+    }
+
+    
 //   settings availabel to user 
-    String encoding = UTF;
+    String encoding =  W1251;
     int MAX_FILE_SIZE_MB = 100;
 
     String dictsFolderPath = "dicts\\";
     String dFileResolution = ".d";
     String dictLoggPath = "log\\log.txt";
-    String lastDictFilePath = null;
+    private String lastDictFilePath = null;
 
 // Saved Dicts list
     private HashMap<String, String> savedDicts = new HashMap<>();
@@ -147,12 +158,12 @@ public class Settings implements Serializable {
 
     }
 
-    public  ArrayList<String> scanAvalabelDicts() {
+     public  ArrayList<String> scanAvalabelDicts() {
         ArrayList<String> dFiles = new ArrayList<>();
         String dName;
         File file = new File(dictsFolderPath);
         File[] fileList = file.listFiles();
-        for (File f : fileList) {
+        for (File f: fileList) {
             dName = f.getAbsolutePath();
             if (dName.endsWith(".d")) {
                 dFiles.add(dName);
@@ -161,5 +172,6 @@ public class Settings implements Serializable {
         return dFiles;
 
     }
+
 
 } // class ends
