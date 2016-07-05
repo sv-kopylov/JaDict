@@ -21,3 +21,13 @@ Tasks
 19 - think about user friendly encoding
 20 - every load - scan isExist saved dics
 21 - think and inplement prompt list algorithm
+
+22 - make the prompts for each vidget
+23 - make a menu
+24 - change settings folder
+25 - make unific font (size, type)
+26 - settings: remove avalabelDicts and RunningDicts
+27 - getList: remake STRONGLY, highest priority
+28 - getList - ignore case, ignore first non characters 
+29 - make butfull components layout
+30 - MAKE PROGRESS BAR
