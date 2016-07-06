@@ -33,8 +33,8 @@ public class Settings implements Serializable {
 
     private static final String DICT_SETTINGS_FILE = "settings\\settings.s";
 
-    private static final String UTF = "UTF-8";
-    private static final String W1251 = "windows-1251";
+    final String UTF = "UTF-8";
+    final String W1251 = "windows-1251";
 
     public static int SUCCESS = 1;
     public static int FAIL = 2;

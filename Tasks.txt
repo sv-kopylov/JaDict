@@ -31,3 +31,5 @@ Tasks
 28 - getList - ignore case, ignore first non characters 
 29 - make butfull components layout
 30 - MAKE PROGRESS BAR
+31 - make popup with warnings
+32 - opening last dictonary

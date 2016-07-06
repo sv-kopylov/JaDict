@@ -2,6 +2,7 @@ package jadict;
 
 import java.io.File;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -14,8 +15,13 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
@@ -38,6 +44,39 @@ public class JaDict extends Application {
         String path;
         Settings settings = Settings.getInstance();
         Label dictName = new Label();
+        
+//        получение словаря при загрузке
+        path = settings.getLastDictFilePath();
+        if (path != null) {
+            dictonary = Dictonary.getInstance(path);
+            dictName.setText(dictonary.name);
+        } else {
+            message = "There no avalabel dicts, would you to scan ?";
+        }
+        //        группа кнопок
+        RadioMenuItem utfRadio = new RadioMenuItem("UTF-8");
+        RadioMenuItem w1251Radio = new RadioMenuItem("windows-1251");
+        ToggleGroup tg = new ToggleGroup();
+        utfRadio.setToggleGroup(tg);
+        w1251Radio.setToggleGroup(tg);
+        
+        if (settings.encoding.equals(settings.UTF)) {
+            utfRadio.setSelected(true);
+        } else if (settings.encoding.equals(settings.W1251)){
+            w1251Radio.setSelected(true);
+        }
+        
+        utfRadio.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+   if (utfRadio.isSelected()){
+            Settings s = Settings.getInstance();
+            s.encoding = s.UTF;
+            s.save();
+   }
+   }
+        });
+        
 //        обработчик выбора файла
         FileChooser fileChoser = new FileChooser();
         fileChoser.setInitialDirectory(new File(settings.dictsFolderPath));
@@ -45,7 +84,8 @@ public class JaDict extends Application {
         fileChoser.getExtensionFilters().add(new FileChooser.ExtensionFilter("zd, d", "*.zd", "*.d"));
         
         
-        
+// строка и пункы меню
+
         MenuBar menuBar = new MenuBar();
         Menu fileMenu = new Menu("File");
         MenuItem openMI = new MenuItem("open");
@@ -59,28 +99,38 @@ public class JaDict extends Application {
             }
         });
         MenuItem exitMI = new MenuItem("exit");
+        exitMI.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Platform.exit();
+            }
+        });
         
         fileMenu.getItems().addAll(openMI, exitMI);
         menuBar.getMenus().add(fileMenu);
-        
-        
-        
         WebView articleField = new WebView();
+        
+        Menu optionsMenu = new Menu("Options");
+        Menu encodingMenu = new Menu("encoding");
 
 
+        
+        
+        
+// создание предлагаемого списка
         ListView<String> promptWordsBox = new ListView<>();
         promptWordsBox.setMaxWidth(150);
         promptWordsBox.setMinWidth(150);
+        promptWordsBox.setPrefHeight(1080);
         promptWordsBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
         articleField.getEngine().loadContent(dictonary.getArticle(promptWordsBox.getSelectionModel().getSelectedItem()));
+       
             }
         });
         
-        promptWordsBox.getSelectionModel().getSelectedItem();
-        
-        
+//       создание поля ввода текста для поиска
         
         TextField enterWord = new TextField();
         enterWord.setMaxWidth(150);
@@ -102,33 +152,28 @@ public class JaDict extends Application {
             if (dictonary != null) {
                 wordList = FXCollections.observableArrayList(dictonary.getList(entered, 50));
                 promptWordsBox.setItems(wordList);
+                promptWordsBox.getSelectionModel().clearAndSelect(0);
+                  articleField.getEngine().loadContent(dictonary.getArticle(promptWordsBox.getSelectionModel().getSelectedItem()));
+                
             }
 
         }
         );
 
-//-d
-        settings.scanUnconvertedDicts(settings.dictsFolderPath);
 
-        path = settings.getLastDictFilePath();
-        if (path != null) {
-            dictonary = Dictonary.getInstance(path);
-        } else {
-            message = "There no avalabel dicts, would you to scan ?";
-        }
-
-
-        HBox root = new HBox();
+       
+// layouts
+        BorderPane root = new BorderPane();
+        HBox hbox = new HBox();
         VBox vbox = new VBox();
         
-        vbox.getChildren().add(dictName);
-        vbox.getChildren().add(enterWord);
-
-        vbox.getChildren().add(promptWordsBox);
+        vbox.getChildren().addAll(enterWord, promptWordsBox);
         
-        root.getChildren().add(menuBar);
-        root.getChildren().add(vbox);
-        root.getChildren().add(articleField);
+        hbox.getChildren().addAll(menuBar,dictName);
+        root.setTop(hbox);
+        root.setLeft(vbox);
+        root.setCenter(articleField);
+        
         
 
         Scene scene = new Scene(root, 300, 250);
