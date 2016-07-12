@@ -16,9 +16,9 @@ Tasks
 14 + add fabric instead ctor to Dictonary class ++
 15 + implement formatAndParse method
 16 + implement wayting makezd finish
-17 - implement scanning subdirectories
-18 - implement load and save settings
-19 - think about user friendly encoding
+17 - implement scanning subdirectories -
+18 - implement load and save settings +
+19 - think about user friendly encoding +
 20 - every load - scan isExist saved dics
 21 - think and inplement prompt list algorithm
 
@@ -30,6 +30,10 @@ Tasks
 27 - getList: remake STRONGLY, highest priority
 28 - getList - ignore case, ignore first non characters 
 29 - make butfull components layout
-30 - MAKE PROGRESS BAR
+30 - MAKE PROGRESS BAR +
 31 - make popup with warnings
-32 - opening last dictonary
+32 - opening last dictonary +
+33 - enter fuckUp ??? 
+34 - open only zd, d - in availabel dicts+
+35 - prompt saved dicts
+36 - make butifull appearance

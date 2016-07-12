@@ -31,13 +31,19 @@ public class Settings implements Serializable {
 //    statics
     private static Settings unicInstance;
 
-    private static final String DICT_SETTINGS_FILE = "settings\\settings.s";
+    static final String dictsFolderPath = "dicts\\";
+    private static final String DICT_SETTINGS_FILE = dictsFolderPath+"settings.s";
 
     final String UTF = "UTF-8";
     final String W1251 = "windows-1251";
 
     public static int SUCCESS = 1;
     public static int FAIL = 2;
+
+    
+//    apearence
+    String backColor = "#cccccc";
+    
 
     public String getLastDictFilePath() {
         
@@ -55,7 +61,7 @@ public class Settings implements Serializable {
     String encoding =  W1251;
     int MAX_FILE_SIZE_MB = 100;
 
-    String dictsFolderPath = "dicts\\";
+    
     String dFileResolution = ".d";
     String dictLoggPath = "log\\log.txt";
     private String lastDictFilePath = null;
