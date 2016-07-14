@@ -17,23 +17,29 @@ Tasks
 15 + implement formatAndParse method
 16 + implement wayting makezd finish
 17 - implement scanning subdirectories -
-18 - implement load and save settings +
-19 - think about user friendly encoding +
-20 - every load - scan isExist saved dics
-21 - think and inplement prompt list algorithm
+18 + implement load and save settings +
+19 + think about user friendly encoding +
+20 + every load - scan isExist saved dics
+21 + think and inplement prompt list algorithm
 
 22 - make the prompts for each vidget
 23 - make a menu
-24 - change settings folder
+24 + change settings folder
 25 - make unific font (size, type)
 26 - settings: remove avalabelDicts and RunningDicts
 27 - getList: remake STRONGLY, highest priority
-28 - getList - ignore case, ignore first non characters 
+28 + getList - ignore case, ignore first non characters 
 29 - make butfull components layout
-30 - MAKE PROGRESS BAR +
+30 + MAKE PROGRESS BAR +
 31 - make popup with warnings
-32 - opening last dictonary +
-33 - enter fuckUp ??? 
+32 + opening last dictonary +
+33 + enter fuckUp - revised parse algoryhtm 
 34 - open only zd, d - in availabel dicts+
 35 - prompt saved dicts
 36 - make butifull appearance
+
+0.1 1 - UI completeng
+0.1 2 - progress Barr compleeteng
+0.1 3 - cleaning Settings 
+0.1 4 - Help menu
+0.1 5 - make formatter

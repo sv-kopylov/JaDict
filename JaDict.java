@@ -193,7 +193,7 @@ public class JaDict extends Application {
             public void handle(MouseEvent event) {
                String article = dictonary.getArticle(promptWordsBox.getSelectionModel().getSelectedItem());
                 articleField.getEngine().loadContent(article);
-                System.out.println(article);
+               
             }
         });
 

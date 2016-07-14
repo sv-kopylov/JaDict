@@ -12,7 +12,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import javafx.beans.property.DoubleProperty;
@@ -24,24 +26,34 @@ public class Dictonary implements Serializable {
 
 // interface  
     public String name;
+
     public String getArticle(String key) {
         String article = null;
         String result = null;
-        if ((key != null)&&(dictMap!=null)) {
-            article=dictMap.get(key);
-            if (article!=null){
-                result=key + "  "+article;
+        if ((key != null) && (dictMap != null)) {
+            article = dictMap.get(key);
+            if (article != null) {
+                result = article;
             }
-        
-        } 
+
+        }
         return result;
     }
-    public ArrayList<String> getList(String key, int width) {
-        ArrayList<String> arrayList = null;
+
+    public ArrayList<String> getList(String key, int width) {        ArrayList<String> arrayList = null;
         if (key != null && width > 0) {
             arrayList = new ArrayList<>();
             if (dictSet != null) {
                 String str = dictSet.ceiling(key);
+                if (str==null){
+                    key = key.toUpperCase();
+                    str = dictSet.ceiling(key);
+                }
+                if (str==null){
+                    key = key.toLowerCase();
+                    str = dictSet.ceiling(key);
+                }
+                
                 for (int i =0; i<width;i++){
                     if (str!=null){
                         arrayList.add(str);
@@ -57,33 +69,34 @@ public class Dictonary implements Serializable {
 
         return arrayList;
     }
-    public static Dictonary getInstance (String path){
+
+    public static Dictonary getInstance(String path) {
         Dictonary instance = null;
-        if (path!=null&&path.length()>0){
-            if (path.endsWith(".d")){
+        if (path != null && path.length() > 0) {
+            if (path.endsWith(".d")) {
                 instance = getSavedInstance(path);
                 Settings.getInstance().setLastDictFilePath(path);
-            } else 
-            if (path.endsWith(".txt")||path.endsWith(".zd")){
+            } else if (path.endsWith(".txt") || path.endsWith(".zd")) {
                 instance = new Dictonary(path);
-               
+
             }
         }
         return instance;
     }
-    
+
 // the main variables
     private TreeMap<String, String> dictMap = null;
     private TreeSet<String> dictSet = null;
     private Settings settings = Settings.getInstance();
     private final long MAX = settings.MAX_FILE_SIZE_MB * 1024 * 1024;
-    public static DoubleProperty progress  = new SimpleDoubleProperty(0);
-    
-  // ctor
+    public static DoubleProperty progress = new SimpleDoubleProperty(0);
+
+    // ctor
     private Dictonary() {
 
     }
-  // ctor
+    // ctor
+
     private Dictonary(String path) {
         if (path.endsWith(".txt")) {
             parse(path);
@@ -96,12 +109,12 @@ public class Dictonary implements Serializable {
 
         }
     }
-    
+
     private static Dictonary getSavedInstance(String path) {
         Dictonary instance = null;
         File file = new File(path);
         if (file.exists()) {
-            
+
             try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream(file));) {
                 instance = (Dictonary) oi.readObject();
             } catch (IOException ex) {
@@ -114,81 +127,68 @@ public class Dictonary implements Serializable {
                 Logger.getInstance().log("class: Dictonary, method: getSavedInstance(String path), ClassNotFoundException");
             }
 
-        } 
+        }
 
         return instance;
     }
 
     private int parse(String path) {
+
         int status = Settings.FAIL;
         progress.setValue(0);
         char ch;
+        char firstSpaceCh;
         int nextCh;
-       
+
         File dicFile = new File(path);
         name = dicFile.getName();
         name = name.substring(0, name.lastIndexOf('.'));
-        
 
         if (dicFile.exists() && dicFile.canRead() && (dicFile.length() > 0)) {
             if ((dicFile.length() < MAX)) {
                 try (BufferedReader fr = new BufferedReader(
-                    new InputStreamReader(
-                            new FileInputStream(dicFile), settings.encoding))){
-                    
+                        new InputStreamReader(
+                                new FileInputStream(dicFile), settings.encoding))) {
+
                     StringBuilder sb = new StringBuilder();
                     String key = null;
                     String value;
                     dictSet = new TreeSet<>();
                     dictMap = new TreeMap<>();
 // for progressBar          
-                     long fileLenght = dicFile.length();
-                     long counter = 0;
-                     double prg;
-                     progress.setValue(0);
-                    
-                    
-                    nextCh = fr.read();
-                    ch = (char) nextCh;
-                    
-                    
-                    while (nextCh != -1) {
-                        if ((ch != ' ') && (ch != '\r')) {
-                            sb.append(ch);
-                        } else {
-                            nextCh = fr.read();
-                            ch = (char) nextCh;
-                            if (ch == ' ') {
-                                key = sb.toString();
-                                dictSet.add(key);
-                                sb.delete(0, sb.length());
-                            } else if (ch == '\n') {
-                                value = sb.toString();
-                                dictMap.put(key, value);
-                                sb.delete(0, sb.length());
-                            } else {
-                                sb.append(' ');
-                                sb.append(ch);
+                    long fileLenght = dicFile.length();
+                    long counter = 0;
+                    double prg;
+                    progress.setValue(0);
+
+                    String gotChapter = fr.readLine();
+//                    nextCh = fr.read();
+//                    ch = (char) nextCh;
+
+                    System.out.println("before while" + gotChapter);
+
+                    while (gotChapter != null) {
+                        key = gotChapter.substring(0, gotChapter.indexOf("  "));
+                        dictSet.add(key);
+                        dictMap.put(key, gotChapter);
+                        gotChapter = fr.readLine();
+
+                        counter++;
+                        System.out.println(counter);
+                        if (counter % 1000 == 0) {
+                            prg = (double) counter / (double) fileLenght;
+                            if (prg <= 1 && prg >= 0) {
+                                progress.set(prg);
+
                             }
                         }
-                        nextCh = fr.read();
-                        ch = (char) nextCh;
-                        
-                        counter++;
-                        if(counter%1000==0){
-                            prg = (double)counter/(double)fileLenght;
-                            if (prg<=1&&prg>=0){
-                              progress.set(prg);  
-//                              progress.setValue(prg);  
-                            }
-                                                    }
-                        
+
                     }
                     counter = 0;
                     fileLenght = 1;
-                   
+
                     status = Settings.SUCCESS;
-                    
+
                 } catch (FileNotFoundException ex) {
                     System.out.println("class: Dictonary, method: parse, FileNotFoundException");
                     Logger.getInstance().log("class: Dictonary, method: parse, FileNotFoundException");
@@ -197,15 +197,14 @@ public class Dictonary implements Serializable {
                     Logger.getInstance().log("class: Dictonary, method: parse, IOexception");
 
                 }
-        save();
-        settings.addSavedDict(name, settings.dictsFolderPath);
-        settings.addRunningDict(name, this);
-            }  else {
-                    System.out.println("class: Dictonary, method: parse, file too big, change settings");
-                    Logger.getInstance().log("class: Dictonary, method: parse, file too big, change settings");
+                save();
+
+            } else {
+                System.out.println("class: Dictonary, method: parse, file too big, change settings");
+                Logger.getInstance().log("class: Dictonary, method: parse, file too big, change settings");
             }
         }
-        
+
         return status;
     }
 
@@ -214,7 +213,7 @@ public class Dictonary implements Serializable {
         File file = new File(settings.dictsFolderPath + name + settings.dFileResolution);
         try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(file));) {
             oo.writeObject(this);
-             Settings.getInstance().setLastDictFilePath(file.getAbsolutePath());
+            Settings.getInstance().setLastDictFilePath(file.getAbsolutePath());
         } catch (IOException ex) {
             System.out.println("class: Dictonary, method: save, IOException");
             Logger.getInstance().log("class: Dictonary, method: save, IOException");
@@ -223,11 +222,11 @@ public class Dictonary implements Serializable {
     }
 
     private int formatAndParse(String path) {
-     
+
         int status = Settings.FAIL;
         Settings s = Settings.getInstance();
         String makezdMessage = "nothing";
-        String inerName = path.substring(path.lastIndexOf('\\')+1, path.indexOf('.'));
+        String inerName = path.substring(path.lastIndexOf('\\') + 1, path.indexOf('.'));
 
         if (path.endsWith(".zd")) {
             String txtName = inerName + ".txt";
@@ -252,23 +251,22 @@ public class Dictonary implements Serializable {
                 File file = new File(s.dictsFolderPath + txtName);
                 file.delete();
                 status = Settings.SUCCESS;
-            } 
-            
+            }
+
         }
         return status;
     }
 
 //-d 
     void showSet() throws IOException {
-         Settings s = Settings.getInstance();
-    File f = new File (s.dictsFolderPath + "log.txt");
-    FileWriter fwr = new FileWriter(f);
-    
+        Settings s = Settings.getInstance();
+        File f = new File(s.dictsFolderPath + "log.txt");
+        FileWriter fwr = new FileWriter(f);
+
         for (String str : dictSet) {
             fwr.write(str + "\n");
             System.out.println(str);
         }
     }
-
 
 } // class ends
