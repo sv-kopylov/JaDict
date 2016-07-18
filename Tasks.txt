@@ -23,23 +23,25 @@ Tasks
 21 + think and inplement prompt list algorithm
 
 22 - make the prompts for each vidget
-23 - make a menu
+23 + make a menu
 24 + change settings folder
 25 - make unific font (size, type)
-26 - settings: remove avalabelDicts and RunningDicts
-27 - getList: remake STRONGLY, highest priority
+25.1 - make unific language
+26 + settings: remove avalabelDicts and RunningDicts
+27 + getList: remake STRONGLY, highest priority
 28 + getList - ignore case, ignore first non characters 
-29 - make butfull components layout
+29 + make butefull components layout
 30 + MAKE PROGRESS BAR +
 31 - make popup with warnings
 32 + opening last dictonary +
 33 + enter fuckUp - revised parse algoryhtm 
-34 - open only zd, d - in availabel dicts+
+34 + open only zd, d - in availabel dicts+
 35 - prompt saved dicts
-36 - make butifull appearance
+36 - make butefull appearance
 
 0.1 1 - UI completeng
-0.1 2 - progress Barr compleeteng
-0.1 3 - cleaning Settings 
+0.1 2 + progress Barr compleeteng
+0.1 3 + cleaning Settings 
 0.1 4 - Help menu
 0.1 5 - make formatter
+0.1 6 + make file menu open

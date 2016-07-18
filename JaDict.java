@@ -13,6 +13,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -44,7 +45,6 @@ public class JaDict extends Application {
     ProgressBar progresBarOpening = new ProgressBar();
     BorderPane root;
 
-
     @Override
     public void start(Stage primaryStage) {
 
@@ -52,6 +52,9 @@ public class JaDict extends Application {
         String path;
         Settings settings = Settings.getInstance();
         Label dictName = new Label();
+//        dictName.setAlignment(Pos.CENTER);
+        dictName.setStyle(settings.dTitleStyle);
+      
 
 //        получение словаря при загрузке
         path = settings.getLastDictFilePath();
@@ -63,7 +66,7 @@ public class JaDict extends Application {
         } else {
             message = "There no avalabel dicts, would you to scan ?";
         }
-//        группа кнопок
+//        группа кнопок выбора кодировки
         RadioMenuItem utfRadio = new RadioMenuItem("UTF-8");
         RadioMenuItem w1251Radio = new RadioMenuItem("windows-1251");
         ToggleGroup tg = new ToggleGroup();
@@ -103,67 +106,103 @@ public class JaDict extends Application {
         utfRadio.setOnAction(encodHandler);
         w1251Radio.setOnAction(encodHandler);
 
-//        обработчик выбора файла
+//        окно импорта файла
         FileChooser fileChoser = new FileChooser();
         fileChoser.setInitialDirectory(new File(settings.dictsFolderPath));
-        fileChoser.setTitle("Выбор словаря");
+        fileChoser.setTitle("Импорт словаря");
         fileChoser.getExtensionFilters().add(new FileChooser.ExtensionFilter("zd", "*.zd"));
+
+//        окно открытия файла
+        FileChooser fileOpener = new FileChooser();
+        fileOpener.setInitialDirectory(new File(settings.dictsFolderPath));
+        fileOpener.setTitle("Открытие словаря");
+        fileOpener.getExtensionFilters().add(new FileChooser.ExtensionFilter("d", "*.d"));
 
 // строка и пункы меню
         MenuBar menuBar = new MenuBar();
-        Menu fileMenu = new Menu("File");
-        
-//   меню открытия файла
-       MenuItem openMI = new MenuItem("open");
-       openMI.setOnAction(new EventHandler<ActionEvent>() {
+        menuBar.setStyle(settings.dStyle);
+//        menuBar.setPrefSize(150, 40);
+        menuBar.setPrefHeight(40);
+        Menu fileMenu = new Menu("Фаил");
+
+//   меню обработки импорта файла
+        MenuItem importMI = new MenuItem("импорт");
+        importMI.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-               File f = fileChoser.showOpenDialog(primaryStage);
+                File f = fileChoser.showOpenDialog(primaryStage);
                 if (f != null) {
                     String openedFilePath = f.getAbsolutePath();
                     if (openedFilePath != null) {
-                        
+                        Dictonary.progress.setValue(0);
                         popupProgress.show(primaryStage);
                         root.disableProperty().set(true);
-                        
-                      Task openDic = new Task() {
+
+                        Task importDic = new Task() {
                             @Override
                             protected Object call() throws Exception {
-
-                            System.out.println("enter to new thread");
-                            dictonary = Dictonary.getInstance(openedFilePath);
-    
-                                System.out.println("complette dict opening in new thread");
-                              
+                                dictonary = Dictonary.getInstance(openedFilePath);
                                 return null;
                             }
 
-                           
                         };
-                      openDic.setOnSucceeded(new EventHandler() {
+                        importDic.setOnSucceeded(new EventHandler() {
                             @Override
                             public void handle(Event event) {
-                            popupProgress.hide();
-                            dictName.setText(dictonary.name);
-                            root.disableProperty().set(false);
-                           
-                            
+                                popupProgress.hide();
+                                dictName.setText(dictonary.name);
+                                root.disableProperty().set(false);
+
                             }
                         });
-                      ExecutorService eS = Executors.newSingleThreadExecutor();
-                      eS.submit(openDic);
-                      eS.shutdown();
-                      
-                        
+                        ExecutorService eS = Executors.newSingleThreadExecutor();
+                        eS.submit(importDic);
+                        eS.shutdown();
+
                         progresBarOpening.progressProperty().bind(dictonary.progress);
-                                      
 
                     }
                 }
 
             }
         });
-        MenuItem exitMI = new MenuItem("exit");
+        MenuItem openMI = new MenuItem("открыть");
+        openMI.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                File f = fileOpener.showOpenDialog(primaryStage);
+                 if (f != null) {
+                    String openedFilePath = f.getAbsolutePath();
+                    if (openedFilePath != null) {
+                      
+                        root.disableProperty().set(true);
+
+                        Task openDic = new Task() {
+                            @Override
+                            protected Object call() throws Exception {
+                                dictonary = Dictonary.getInstance(openedFilePath);
+                                return null;
+                            }
+
+                        };
+                        openDic.setOnSucceeded(new EventHandler() {
+                            @Override
+                            public void handle(Event event) {
+                                dictName.setText(dictonary.name);
+                                root.disableProperty().set(false);
+
+                            }
+                        });
+                        ExecutorService eS = Executors.newSingleThreadExecutor();
+                        eS.submit(openDic);
+                        eS.shutdown();
+                    }
+                }
+
+
+            }
+        });
+        MenuItem exitMI = new MenuItem("выход");
 //   меню выхода
         exitMI.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -171,13 +210,14 @@ public class JaDict extends Application {
                 Platform.exit();
             }
         });
-
-        fileMenu.getItems().addAll(openMI, exitMI);
+        fileMenu.getItems().addAll(openMI,importMI, exitMI);
         menuBar.getMenus().add(fileMenu);
+        
         WebView articleField = new WebView();
+        articleField.setStyle(settings.dStyle);
 // меню опций
-        Menu optionsMenu = new Menu("Options");
-        Menu encodingMenu = new Menu("encoding");
+        Menu optionsMenu = new Menu("Опции");
+        Menu encodingMenu = new Menu("кодировка");
 
         encodingMenu.getItems().addAll(utfRadio, w1251Radio);
         optionsMenu.getItems().addAll(encodingMenu);
@@ -185,22 +225,25 @@ public class JaDict extends Application {
 
 // создание предлагаемого списка
         ListView<String> promptWordsBox = new ListView<>();
-        promptWordsBox.setMaxWidth(150);
+//        promptWordsBox.setMaxWidth(150);
         promptWordsBox.setMinWidth(150);
         promptWordsBox.setPrefHeight(1080);
+        promptWordsBox.setStyle(settings.dStyle);
         promptWordsBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-               String article = dictonary.getArticle(promptWordsBox.getSelectionModel().getSelectedItem());
+                if (event.getClickCount()==2){
+                String article = dictonary.getArticle(promptWordsBox.getSelectionModel().getSelectedItem());
                 articleField.getEngine().loadContent(article);
-               
+                }
             }
         });
 
 //       создание поля ввода текста для поиска
         TextField enterWord = new TextField();
-        enterWord.setMaxWidth(150);
+//        enterWord.setMaxWidth(150);
         enterWord.setMinWidth(150);
+        enterWord.setStyle(settings.dStyle);
 
         enterWord.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -221,7 +264,6 @@ public class JaDict extends Application {
                 promptWordsBox.getSelectionModel().clearAndSelect(0);
                 String article = dictonary.getArticle(promptWordsBox.getSelectionModel().getSelectedItem());
                 articleField.getEngine().loadContent(article);
-               
 
             }
 
@@ -230,16 +272,20 @@ public class JaDict extends Application {
 
 // layouts
         root = new BorderPane();
-        
         HBox hbox = new HBox();
         VBox vbox = new VBox();
+        VBox rightVbox = new VBox();
+        rightVbox.setStyle(settings.dStyle);
+        rightVbox.setAlignment(Pos.CENTER);
 
+        rightVbox.getChildren().addAll(dictName, articleField);
+        
         vbox.getChildren().addAll(enterWord, promptWordsBox);
-
-        hbox.getChildren().addAll(menuBar, dictName);
+        hbox.getChildren().addAll(menuBar);
+//        rightVbox.getChildren().addAll(dictName, articleField);
         root.setTop(hbox);
         root.setLeft(vbox);
-        root.setCenter(articleField);
+        root.setCenter(rightVbox);
 
         Scene scene = new Scene(root, 300, 250);
 
@@ -250,19 +296,14 @@ public class JaDict extends Application {
 //        всплывающее окно с прогрессбаром
 //        popupProgress.setWidth(400);
 //        popupProgress.setHeight(70);
+        Label popupName = new Label("Импорт словаря");
+        VBox popupVbox = new VBox();
+        popupVbox.setStyle("-fx-background-color: " + settings.backColor);
 
-Label popupName = new Label("Открытие словаря");
-VBox popupVbox = new VBox();
-popupVbox.setStyle("-fx-background-color: " + settings.backColor);
+        progresBarOpening.setPrefSize(400, 30);
 
+        popupVbox.getChildren().addAll(popupName, progresBarOpening);
 
-progresBarOpening.setPrefSize(400, 30);
-
-
-popupVbox.getChildren().addAll(popupName,progresBarOpening);
-
-
-        
         popupProgress.getContent().addAll(popupVbox);
 
     } // end of start method

@@ -42,19 +42,19 @@ public class Settings implements Serializable {
 
     
 //    apearence
+    String dFont = "TimesNewRoman";
+    String dStyle = "-fx-base:silver;"
+            + " -fx-border-width:1pt;"
+            + "-fx-border-color:navy;"
+            + "-fx-font:bold 16pt "
+            + dFont;
+    String dTitleStyle ="-fx-base:skyblue;"
+            + "-fx-text-fill:#000066; "
+            + " -fx-font:bold 20pt "
+            + dFont;
     String backColor = "#cccccc";
+
     
-
-    public String getLastDictFilePath() {
-        
-        return lastDictFilePath;
-        
-    }
-
-    public void setLastDictFilePath(String lastDictFilePath) {
-        this.lastDictFilePath = lastDictFilePath;
-        save();
-    }
 
     
 //   settings availabel to user 
@@ -63,41 +63,17 @@ public class Settings implements Serializable {
 
     
     String dFileResolution = ".d";
-    String dictLoggPath = "log\\log.txt";
+    String dictLoggPath = "dicts\\log.txt";
+    
     private String lastDictFilePath = null;
-
-// Saved Dicts list
-    private HashMap<String, String> savedDicts = new HashMap<>();
-
-    public void addSavedDict(String name, String path) {
-        savedDicts.put(name, path);
+    public String getLastDictFilePath() {
+        
+        return lastDictFilePath;
+        
+    }
+    public void setLastDictFilePath(String lastDictFilePath) {
+        this.lastDictFilePath = lastDictFilePath;
         save();
-    }
-
-    public String getSavedDictPath(String key) {
-        return savedDicts.get(key);
-    }
-
-    public void delFromSavedDictList(String key) {
-        savedDicts.remove(key);
-        save();
-    }
-
-//  Running Dicts List
-    transient private HashMap<String, Dictonary> runningDicts = new HashMap<>();
-
-    public void addRunningDict(String key, Dictonary dict) {
-        if (key != null && dict != null) {
-            runningDicts.put(key, dict);
-        }
-    }
-
-    public Dictonary getRunningDict(String key) {
-        return runningDicts.get(key);
-    }
-
-    public void delRunningDictList(String key) {
-        runningDicts.remove(key);
     }
 
 //   private ctor
@@ -124,7 +100,6 @@ public class Settings implements Serializable {
             try (ObjectInputStream oi = new ObjectInputStream(new FileInputStream(file));) {
                 instance = (Settings) oi.readObject();
                 oi.close();
-                instance.runningDicts = new HashMap<>();
             } catch (IOException ex) {
 // -d
                 System.out.println("class: Settings, method: getSavedInstance(), IOException");
@@ -137,31 +112,6 @@ public class Settings implements Serializable {
 
         }
         return instance;
-    }
-
-    public void scanUnconvertedDicts(String path) {
-        TreeSet<String> zdFiles = new TreeSet<>();
-        TreeSet<String> dFiles = new TreeSet<>();
-        String dName;
-
-        File file = new File(path);
-        File[] fileList = file.listFiles();
-        for (File f : fileList) {
-            dName = f.getName();
-            if (dName.endsWith(".zd")) {
-                zdFiles.add(dName.substring(0, dName.indexOf(".")));
-            } else if (dName.endsWith(".d")) {
-                dFiles.add(dName.substring(0, dName.indexOf(".")));
-            }
-        }
-
-        for (String s : dFiles) {
-            zdFiles.remove(s);
-        }
-        for (String s : zdFiles) {
-            Dictonary.getInstance(path + s + ".zd");
-        }
-
     }
 
      public  ArrayList<String> scanAvalabelDicts() {

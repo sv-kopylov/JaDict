@@ -61,7 +61,9 @@ public class Dictonary implements Serializable {
                     } else {
                         arrayList.add("");
                     }
+                    if (str!=null){
                     str = dictSet.higher(str);
+                    }
                 }
 //                        
             }
@@ -152,31 +154,28 @@ public class Dictonary implements Serializable {
 
                     StringBuilder sb = new StringBuilder();
                     String key = null;
-                    String value;
                     dictSet = new TreeSet<>();
                     dictMap = new TreeMap<>();
 // for progressBar          
-                    long fileLenght = dicFile.length();
+                    long fileLenght = dicFile.length()/10;
                     long counter = 0;
                     double prg;
+                    double renewCounter = (double)fileLenght;
                     progress.setValue(0);
 
                     String gotChapter = fr.readLine();
-//                    nextCh = fr.read();
-//                    ch = (char) nextCh;
-
-                    System.out.println("before while" + gotChapter);
+                    counter+=gotChapter.length();
 
                     while (gotChapter != null) {
                         key = gotChapter.substring(0, gotChapter.indexOf("  "));
                         dictSet.add(key);
                         dictMap.put(key, gotChapter);
                         gotChapter = fr.readLine();
-
-                        counter++;
-                        System.out.println(counter);
-                        if (counter % 1000 == 0) {
-                            prg = (double) counter / (double) fileLenght;
+                        if (gotChapter!=null){counter+=gotChapter.length();}
+                        
+                        if (counter > renewCounter) {
+                            renewCounter+= (double)fileLenght;
+                            prg = (double) counter / ((double) fileLenght*10);
                             if (prg <= 1 && prg >= 0) {
                                 progress.set(prg);
 
@@ -186,6 +185,8 @@ public class Dictonary implements Serializable {
                     }
                     counter = 0;
                     fileLenght = 1;
+                    renewCounter = 0;
+  
 
                     status = Settings.SUCCESS;
 
