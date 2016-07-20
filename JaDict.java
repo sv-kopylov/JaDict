@@ -24,7 +24,10 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -42,6 +45,7 @@ public class JaDict extends Application {
     Dictonary dictonary = null;
     ObservableList<String> wordList;
     Popup popupProgress = new Popup();
+    
     ProgressBar progresBarOpening = new ProgressBar();
     BorderPane root;
 
@@ -52,6 +56,7 @@ public class JaDict extends Application {
         String path;
         Settings settings = Settings.getInstance();
         Label dictName = new Label();
+        WebView articleField = new WebView();
 //        dictName.setAlignment(Pos.CENTER);
         dictName.setStyle(settings.dTitleStyle);
       
@@ -62,7 +67,7 @@ public class JaDict extends Application {
             dictonary = Dictonary.getInstance(path);
             if (dictonary != null) {
                 dictName.setText(dictonary.name);
-            }
+                }
         } else {
             message = "There no avalabel dicts, would you to scan ?";
         }
@@ -123,7 +128,7 @@ public class JaDict extends Application {
         menuBar.setStyle(settings.dStyle);
 //        menuBar.setPrefSize(150, 40);
         menuBar.setPrefHeight(40);
-        Menu fileMenu = new Menu("Фаил");
+        Menu fileMenu = new Menu("Словарь");
 
 //   меню обработки импорта файла
         MenuItem importMI = new MenuItem("импорт");
@@ -210,10 +215,27 @@ public class JaDict extends Application {
                 Platform.exit();
             }
         });
-        fileMenu.getItems().addAll(openMI,importMI, exitMI);
+        
+        
+//       меню информации
+        MenuItem infoMI = new MenuItem("инфо");
+        infoMI.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (dictonary!=null){
+  String s = "Словарь: "+dictonary.name+"<br>"
+          + "кодировка: "+ dictonary.encoding+"<br>"
+          + "статей: "+  dictonary.dSize;
+  articleField.getEngine().loadContent(s);
+                }
+            }
+        });
+        
+        
+        fileMenu.getItems().addAll(openMI,importMI, infoMI,exitMI);
         menuBar.getMenus().add(fileMenu);
         
-        WebView articleField = new WebView();
+        
         articleField.setStyle(settings.dStyle);
 // меню опций
         Menu optionsMenu = new Menu("Опции");
@@ -243,7 +265,7 @@ public class JaDict extends Application {
         TextField enterWord = new TextField();
 //        enterWord.setMaxWidth(150);
         enterWord.setMinWidth(150);
-        enterWord.setStyle(settings.dStyle);
+        enterWord.setStyle(settings.dStyle + " -fx-text-fill:#000000; ");
 
         enterWord.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -283,22 +305,31 @@ public class JaDict extends Application {
         vbox.getChildren().addAll(enterWord, promptWordsBox);
         hbox.getChildren().addAll(menuBar);
 //        rightVbox.getChildren().addAll(dictName, articleField);
-        root.setTop(hbox);
+        root.setTop(menuBar);
         root.setLeft(vbox);
         root.setCenter(rightVbox);
 
-        Scene scene = new Scene(root, 300, 250);
+        Scene scene = new Scene(root, 600, 500);
 
         primaryStage.setTitle("JaDict");
         primaryStage.setScene(scene);
         primaryStage.show();
 
 //        всплывающее окно с прогрессбаром
-//        popupProgress.setWidth(400);
-//        popupProgress.setHeight(70);
+        popupProgress.setWidth(400);
+        popupProgress.setHeight(70);
+        DropShadow effect = new DropShadow();
+        effect.setOffsetX(5);
+        effect.setOffsetY(5);
+        
+        
         Label popupName = new Label("Импорт словаря");
         VBox popupVbox = new VBox();
-        popupVbox.setStyle("-fx-background-color: " + settings.backColor);
+        
+//        popupVbox.setStyle("-fx-background-color: " + settings.backColor);
+        popupVbox.setStyle(settings.dStyle);
+        popupVbox.setEffect(effect);
+       
 
         progresBarOpening.setPrefSize(400, 30);
 

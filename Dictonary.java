@@ -26,6 +26,8 @@ public class Dictonary implements Serializable {
 
 // interface  
     public String name;
+    public String encoding;
+    public int dSize;
 
     public String getArticle(String key) {
         String article = null;
@@ -145,7 +147,7 @@ public class Dictonary implements Serializable {
         File dicFile = new File(path);
         name = dicFile.getName();
         name = name.substring(0, name.lastIndexOf('.'));
-
+        encoding = settings.encoding;
         if (dicFile.exists() && dicFile.canRead() && (dicFile.length() > 0)) {
             if ((dicFile.length() < MAX)) {
                 try (BufferedReader fr = new BufferedReader(
@@ -186,7 +188,7 @@ public class Dictonary implements Serializable {
                     counter = 0;
                     fileLenght = 1;
                     renewCounter = 0;
-  
+                    
 
                     status = Settings.SUCCESS;
 
@@ -198,6 +200,7 @@ public class Dictonary implements Serializable {
                     Logger.getInstance().log("class: Dictonary, method: parse, IOexception");
 
                 }
+                dSize = dictSet.size();
                 save();
 
             } else {

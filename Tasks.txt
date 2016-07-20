@@ -45,3 +45,5 @@ Tasks
 0.1 4 - Help menu
 0.1 5 - make formatter
 0.1 6 + make file menu open
+0.1 7 
+0.1 8 - dictonary info

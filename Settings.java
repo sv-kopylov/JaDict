@@ -42,15 +42,19 @@ public class Settings implements Serializable {
 
     
 //    apearence
-    String dFont = "TimesNewRoman";
+    String dFont = "TimesNewRoman;";
     String dStyle = "-fx-base:silver;"
+//            + "-fx-text-fill:#433d8b; "
             + " -fx-border-width:1pt;"
-            + "-fx-border-color:navy;"
-            + "-fx-font:bold 16pt "
+            + "-fx-border-color:gray;"
+            + "-fx-background-color:#f5f5f5;"          
+            + "-fx-font: 16pt "
+
             + dFont;
-    String dTitleStyle ="-fx-base:skyblue;"
-            + "-fx-text-fill:#000066; "
-            + " -fx-font:bold 20pt "
+    
+    String dTitleStyle ="-fx-base:silver;"
+//            + "-fx-text-fill:#433d8b; "
+            + " -fx-font: 20pt "
             + dFont;
     String backColor = "#cccccc";
 
