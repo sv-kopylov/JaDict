@@ -45,7 +45,7 @@ public class JaDict extends Application {
     Dictonary dictonary = null;
     ObservableList<String> wordList;
     Popup popupProgress = new Popup();
-    
+
     ProgressBar progresBarOpening = new ProgressBar();
     BorderPane root;
 
@@ -59,7 +59,6 @@ public class JaDict extends Application {
         WebView articleField = new WebView();
 //        dictName.setAlignment(Pos.CENTER);
         dictName.setStyle(settings.dTitleStyle);
-      
 
 //        получение словаря при загрузке
         path = settings.getLastDictFilePath();
@@ -67,7 +66,7 @@ public class JaDict extends Application {
             dictonary = Dictonary.getInstance(path);
             if (dictonary != null) {
                 dictName.setText(dictonary.name);
-                }
+            }
         } else {
             message = "There no avalabel dicts, would you to scan ?";
         }
@@ -85,7 +84,7 @@ public class JaDict extends Application {
             w1251Radio.setSelected(true);
         }
 
-//        обработчик группы кнопок
+//        обработчик группы флажков
         EventHandler<ActionEvent> encodHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -126,11 +125,10 @@ public class JaDict extends Application {
 // строка и пункы меню
         MenuBar menuBar = new MenuBar();
         menuBar.setStyle(settings.dStyle);
-//        menuBar.setPrefSize(150, 40);
         menuBar.setPrefHeight(40);
         Menu fileMenu = new Menu("Словарь");
 
-//   меню обработки импорта файла
+//   пункт обработки импорта файла
         MenuItem importMI = new MenuItem("импорт");
         importMI.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -176,10 +174,10 @@ public class JaDict extends Application {
             @Override
             public void handle(ActionEvent event) {
                 File f = fileOpener.showOpenDialog(primaryStage);
-                 if (f != null) {
+                if (f != null) {
                     String openedFilePath = f.getAbsolutePath();
                     if (openedFilePath != null) {
-                      
+
                         root.disableProperty().set(true);
 
                         Task openDic = new Task() {
@@ -204,38 +202,35 @@ public class JaDict extends Application {
                     }
                 }
 
-
             }
         });
         MenuItem exitMI = new MenuItem("выход");
-//   меню выхода
+//   пункт выхода
         exitMI.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Platform.exit();
             }
         });
-        
-        
-//       меню информации
+
+//  пункт информации
         MenuItem infoMI = new MenuItem("инфо");
         infoMI.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (dictonary!=null){
-  String s = "Словарь: "+dictonary.name+"<br>"
-          + "кодировка: "+ dictonary.encoding+"<br>"
-          + "статей: "+  dictonary.dSize;
-  articleField.getEngine().loadContent(s);
+                if (dictonary != null) {
+                    String s = "Словарь: " + dictonary.name + "<br>"
+                            + "кодировка: " + dictonary.encoding + "<br>"
+                            + "статей: " + dictonary.dSize;
+                    s = new Formater().format(s, " ");
+                    articleField.getEngine().loadContent(s);
                 }
             }
         });
-        
-        
-        fileMenu.getItems().addAll(openMI,importMI, infoMI,exitMI);
+
+        fileMenu.getItems().addAll(openMI, importMI, infoMI, exitMI);
         menuBar.getMenus().add(fileMenu);
-        
-        
+
         articleField.setStyle(settings.dStyle);
 // меню опций
         Menu optionsMenu = new Menu("Опции");
@@ -245,6 +240,31 @@ public class JaDict extends Application {
         optionsMenu.getItems().addAll(encodingMenu);
         menuBar.getMenus().addAll(optionsMenu);
 
+// меню О программе
+        Menu helpMenu = new Menu("О программе");
+        MenuItem help = new MenuItem("о программе");
+        help.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String s;
+                s =     "<b>JaDict</b> v0.1<br>"
+                        +"Использование:<br>"
+                        + "1. Скачиваем утилиту makezd и кладем ее в папку dicts <br>"
+                        + "2. Фаил -> импорт -> выбираем свой любимый словарь в формате zd<br>"
+                        + "Если отображается некорректно - меняем кодировку и повторяем п.2"
+                        + "(кодировку в которой открыт словарь можно посмотреть Фаил -> инфо)<br>"
+                        + "3. Импортированные словари хранятся в папке dicts, однажды импортированный словарь "
+                        + "можно не реимпортировать, а просто открывать Фаил -> открыть<br>"
+                        + "4. Программа распространяется на условиях GPL<br>"
+                        + "5. Связь с автором: imber81@gmail.com<br>"
+                        ;
+                s = new Formater().format(s, "Внимание!");
+                articleField.getEngine().loadContent(s);
+            }
+        });
+        helpMenu.getItems().addAll(help);
+        menuBar.getMenus().addAll(helpMenu);
+        
 // создание предлагаемого списка
         ListView<String> promptWordsBox = new ListView<>();
 //        promptWordsBox.setMaxWidth(150);
@@ -254,16 +274,15 @@ public class JaDict extends Application {
         promptWordsBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (event.getClickCount()==2){
-                String article = dictonary.getArticle(promptWordsBox.getSelectionModel().getSelectedItem());
-                articleField.getEngine().loadContent(article);
+                if (event.getClickCount() == 2) {
+                    String article = dictonary.getArticle(promptWordsBox.getSelectionModel().getSelectedItem());
+                    articleField.getEngine().loadContent(article);
                 }
             }
         });
 
 //       создание поля ввода текста для поиска
         TextField enterWord = new TextField();
-//        enterWord.setMaxWidth(150);
         enterWord.setMinWidth(150);
         enterWord.setStyle(settings.dStyle + " -fx-text-fill:#000000; ");
 
@@ -301,7 +320,7 @@ public class JaDict extends Application {
         rightVbox.setAlignment(Pos.CENTER);
 
         rightVbox.getChildren().addAll(dictName, articleField);
-        
+
         vbox.getChildren().addAll(enterWord, promptWordsBox);
         hbox.getChildren().addAll(menuBar);
 //        rightVbox.getChildren().addAll(dictName, articleField);
@@ -321,15 +340,13 @@ public class JaDict extends Application {
         DropShadow effect = new DropShadow();
         effect.setOffsetX(5);
         effect.setOffsetY(5);
-        
-        
+
         Label popupName = new Label("Импорт словаря");
         VBox popupVbox = new VBox();
-        
+
 //        popupVbox.setStyle("-fx-background-color: " + settings.backColor);
         popupVbox.setStyle(settings.dStyle);
         popupVbox.setEffect(effect);
-       
 
         progresBarOpening.setPrefSize(400, 30);
 

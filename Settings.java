@@ -56,7 +56,7 @@ public class Settings implements Serializable {
 //            + "-fx-text-fill:#433d8b; "
             + " -fx-font: 20pt "
             + dFont;
-    String backColor = "#cccccc";
+    String backColor = "#f5f5f5";
 
     
 

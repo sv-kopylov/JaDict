@@ -30,12 +30,13 @@ public class Dictonary implements Serializable {
     public int dSize;
 
     public String getArticle(String key) {
+        Formater f = new Formater();
         String article = null;
         String result = null;
         if ((key != null) && (dictMap != null)) {
             article = dictMap.get(key);
             if (article != null) {
-                result = article;
+                result = f.format(article, key);
             }
 
         }

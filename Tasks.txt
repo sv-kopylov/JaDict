@@ -42,8 +42,9 @@ Tasks
 0.1 1 - UI completeng
 0.1 2 + progress Barr compleeteng
 0.1 3 + cleaning Settings 
-0.1 4 - Help menu
+0.1 4 - Help menu !!!
 0.1 5 - make formatter
 0.1 6 + make file menu open
 0.1 7 
-0.1 8 - dictonary info
+0.1 8 + dictonary info add Formater 
+0.1 9 - add bacjground color into ArticleArea!!!
