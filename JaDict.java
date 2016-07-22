@@ -26,8 +26,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -57,6 +55,7 @@ public class JaDict extends Application {
         Settings settings = Settings.getInstance();
         Label dictName = new Label();
         WebView articleField = new WebView();
+        articleField.getEngine().loadContent(new Formater().format(" ", ""));
 //        dictName.setAlignment(Pos.CENTER);
         dictName.setStyle(settings.dTitleStyle);
 
