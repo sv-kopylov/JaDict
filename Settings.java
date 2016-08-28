@@ -31,7 +31,8 @@ public class Settings implements Serializable {
 //    statics
     private static Settings unicInstance;
 
-    static final String dictsFolderPath = "dicts\\";
+    static final String dictsFolderPath = ".\\";
+//    static final String dictsFolderPath = "dicts\\";
     private static final String DICT_SETTINGS_FILE = dictsFolderPath+"settings.s";
 
     final String UTF = "UTF-8";
@@ -67,7 +68,7 @@ public class Settings implements Serializable {
 
     
     String dFileResolution = ".d";
-    String dictLoggPath = "dicts\\log.txt";
+    String dictLoggPath = "logLog.txt";
     
     private String lastDictFilePath = null;
     public String getLastDictFilePath() {
@@ -118,20 +119,6 @@ public class Settings implements Serializable {
         return instance;
     }
 
-     public  ArrayList<String> scanAvalabelDicts() {
-        ArrayList<String> dFiles = new ArrayList<>();
-        String dName;
-        File file = new File(dictsFolderPath);
-        File[] fileList = file.listFiles();
-        for (File f: fileList) {
-            dName = f.getAbsolutePath();
-            if (dName.endsWith(".d")) {
-                dFiles.add(dName);
-            }
-        }
-        return dFiles;
-
-    }
 
 
 } // class ends

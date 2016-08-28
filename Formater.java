@@ -5,8 +5,7 @@
  */
 package jadict;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.UnsupportedEncodingException;
 
 /**
  *
@@ -38,16 +37,13 @@ public class Formater {
         return "<b>" + enter + "</b>";
     }
 
-   
 
     public String format(String initialStr, String key) {
         String result = "";
         if (initialStr != null && key != null) {
-
             result = initialStr.replaceFirst(key + ".." + key, key);
             result = result.replaceFirst(key, setFont(bold(key), "5"));
             result = setHtml(setFont(result, "4"));
-
         }
         return result;
     }

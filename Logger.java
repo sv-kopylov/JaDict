@@ -18,7 +18,7 @@ public class Logger {
    
     private File file;
     private FileWriter fw;
-    static final int MAX = 10;
+    static final int MAX = 1000;
     int ctr = 0;
    
 
@@ -34,16 +34,21 @@ public class Logger {
             sb.append(s);
             sb.append(": ");
         }
-        sb.append("\n");
+        sb.append("\t\n");
         try {
             
             fw.write(sb.toString());
+            fw.flush();
+            System.out.println("пиwу в лог "+sb.toString());
             ctr++;
             
             if (ctr>=MAX){
+               fw.flush();
+               fw.close();
              file.delete();
              file = new File(Settings.getInstance().dictLoggPath);
              ctr=0;
+             fw = new FileWriter(file);
             }
         } catch (IOException ex) {
             System.out.println(curTime()+" ошибка записи файла в лог");
@@ -64,7 +69,7 @@ private Logger()  {
         file = new File(Settings.getInstance().dictLoggPath);
         try {
            
-            
+            System.out.println(file.getAbsolutePath());
             fw = new FileWriter(file);
             
         } catch (IOException ex) {
