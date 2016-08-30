@@ -118,7 +118,7 @@ public class JaDict extends Application {
 
 //        окно открытия файла
         FileChooser fileOpener = new FileChooser();
-      fileOpener.setInitialDirectory(new File(settings.dictsFolderPath));
+        fileOpener.setInitialDirectory(new File(settings.dictsFolderPath));
         fileOpener.setTitle("Открытие словаря");
         fileOpener.getExtensionFilters().add(new FileChooser.ExtensionFilter("d", "*.d"));
 
@@ -246,16 +246,18 @@ public class JaDict extends Application {
             @Override
             public void handle(ActionEvent event) {
                 String s;
-                s = "<b>JaDict</b> v0.1<br>"
-                        + "Использование:<br>"
-                        + "1. Скачиваем утилиту makezd и кладем ее в папку dicts <br>"
-                        + "2. Фаил -> импорт -> выбираем свой любимый словарь в формате zd<br>"
-                        + "Если отображается некорректно - меняем кодировку и повторяем п.2"
-                        + "(кодировку в которой открыт словарь можно посмотреть Фаил -> инфо)<br>"
-                        + "3. Импортированные словари хранятся в папке dicts, однажды импортированный словарь "
-                        + "можно не реимпортировать, а просто открывать Фаил -> открыть<br>"
-                        + "4. Программа распространяется на условиях GPL<br>"
-                        + "5. Связь с автором: imber81@gmail.com<br>";
+                s = "<b>JaDict</b> v1.0<br><br>"
+                        + "Для импорта словарей нужна утилита makezd "
+                        + "в томже каталоге что и программма.<br>"
+                        + "см. <font color=blue>http://free-dict.narod.ru/download.html</font><br><br>"
+                        + "По использованию:<br>"
+                        + "Жмешь импорт выбираешь словарь в формате zd, пользуешься.<br>"
+                        + "Импортированный словарь сохраняется в формате .d в папке с программой, открыть его быстрее чем вновь импортировать.<br>"
+                        + "Если видишь кракозябры меняй кодировку (результат виден после введения слова в поле поиска).<br>"
+                        + "Коллекция словарей <font color=blue>http://dict.pocketz.ru</font><br><br>"
+                        + "Программа распространяется на условиях GPL. <br>"
+                        + "Исходники: <font color=blue>https://github.com/sv-kopylov/JaDict</font><br><br>"
+                        + "Связь с автором: imber81@gmail.com<br>";
                 s = formater.format(s, "Внимание!");
                 articleField.getEngine().loadContent(s);
             }
@@ -294,7 +296,10 @@ public class JaDict extends Application {
         enterWord.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                promptWordsBox.getSelectionModel().select(0);
+                 promptWordsBox.getSelectionModel().clearAndSelect(0);
+                  promptWordsBox.scrollTo(0);
+                
+//                promptWordsBox.getSelectionModel().select(0);
                 String entered = enterWord.getText();
                 if (dictonary != null) {
                     wordList = FXCollections.observableArrayList(dictonary.getList(entered, 50));
@@ -307,10 +312,12 @@ public class JaDict extends Application {
             @Override
             public void handle(ActionEvent event) {
                 String entered = enterWord.getText();
+                
                 if (dictonary != null) {
                     wordList = FXCollections.observableArrayList(dictonary.getList(entered, 50));
                     promptWordsBox.setItems(wordList);
                     promptWordsBox.getSelectionModel().clearAndSelect(0);
+                    promptWordsBox.scrollTo(0);
                     String article, key;
                     try {
                         key = promptWordsBox.getSelectionModel().getSelectedItem();
@@ -320,7 +327,7 @@ public class JaDict extends Application {
                         System.out.println("UnsupportedEncodingException");
                         System.out.println(ex.toString());
                     }
-                    
+
                 }
             }
         });
